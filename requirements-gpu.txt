@@ -1,0 +1,5 @@
+# Runtime CUDA 12 untuk GPU NVIDIA (dipasang otomatis oleh install.py bila GPU terdeteksi)
+# CTranslate2 4.5+ (dipakai faster-whisper) butuh cuBLAS CUDA 12 + cuDNN 9.
+# Paket pip ini membawa DLL-nya sendiri -> TIDAK perlu install CUDA Toolkit manual.
+nvidia-cublas-cu12
+nvidia-cudnn-cu12==9.*

@@ -1,0 +1,1715 @@
+{
+  "version": 1,
+  "total_revisions_trained": 3,
+  "unigram_counts": {
+    "brevi": {
+      "Bravy": 6,
+      "bravy": 6
+    },
+    "cong": {
+      "conk": 3,
+      "cong": 3
+    },
+    "mangg": {
+      "manggil": 6
+    },
+    "entar": {
+      "ngent*t": 3
+    },
+    "gini": {
+      "gue": 3,
+      "gini": 5
+    },
+    "manggel": {
+      "manggil": 6
+    },
+    "vicong": {
+      "viconk": 3
+    },
+    "masa": {
+      "masa": 9,
+      "Mas": 6,
+      "mas": 3
+    },
+    "umar": {
+      "umur": 3
+    },
+    "panggel": {
+      "panggil": 3
+    },
+    "panggila": {
+      "Aloy": 3
+    },
+    "panggal": {
+      "panggil": 3
+    },
+    "mangglenya": {
+      "manggilnya": 3
+    },
+    "akang": {
+      "Akong": 3,
+      "lah kan": 3
+    },
+    "manggila": {
+      "manggil": 3
+    },
+    "lu": {
+      "lu nya": 3
+    },
+    "gue": {
+      "bangs*t": 3,
+      "gue": 24,
+      "Gue": 7
+    },
+    "mangil": {
+      "gue manggil": 3
+    },
+    "mangel": {
+      "manggil": 3
+    },
+    "gopiak": {
+      "Gobl*k": 3
+    },
+    "main": {
+      "mau yang": 3
+    },
+    "bener": {
+      "bener": 3,
+      "Bener": 3,
+      "fix": 3
+    },
+    "gak": {
+      "gak": 9,
+      "pura": 3
+    },
+    "sih": {
+      "pura": 3,
+      "sih": 2
+    },
+    "kelar": {
+      "dari tadi": 3
+    },
+    "bangsa": {
+      "Bangs*t": 3
+    }
+  },
+  "next_context": {
+    "brevi|berapa": {
+      "Bravy": 3
+    },
+    "cong|oh": {
+      "conk": 3
+    },
+    "mangg|cong": {
+      "manggil": 3
+    },
+    "cong|entar": {
+      "cong": 3
+    },
+    "entar|selalu": {
+      "ngent*t": 3
+    },
+    "gini|gue": {
+      "gue": 3,
+      "gini": 3
+    },
+    "mangg|gue": {
+      "manggil": 3
+    },
+    "manggel|vicong": {
+      "manggil": 3
+    },
+    "vicong|itu": {
+      "viconk": 3
+    },
+    "masa|gini": {
+      "masa": 3
+    },
+    "brevi|umur": {
+      "bravy": 3
+    },
+    "umar|60": {
+      "umur": 3
+    },
+    "brevi|panggel": {
+      "bravy": 3
+    },
+    "panggel|aloy": {
+      "panggil": 3
+    },
+    "panggila|apa": {
+      "Aloy": 3
+    },
+    "masa|dibilang": {
+      "masa": 3
+    },
+    "brevi|panggal": {
+      "Bravy": 3
+    },
+    "panggal|aloy": {
+      "panggil": 3
+    },
+    "mangglenya|akong": {
+      "manggilnya": 3
+    },
+    "masa|akong": {
+      "masa": 3
+    },
+    "masa|aja": {
+      "Mas": 6,
+      "mas": 3
+    },
+    "akang|lo": {
+      "Akong": 3
+    },
+    "manggila|akong": {
+      "manggil": 3
+    },
+    "akang|lu": {
+      "lah kan": 3
+    },
+    "lu|juga": {
+      "lu nya": 3
+    },
+    "gue|mangil": {
+      "bangs*t": 3
+    },
+    "mangil|gue": {
+      "gue manggil": 3
+    },
+    "gue|om": {
+      "gue": 6
+    },
+    "gue|mangel": {
+      "Gue": 3
+    },
+    "mangel|gue": {
+      "manggil": 3
+    },
+    "gopiak|kan": {
+      "Gobl*k": 3
+    },
+    "manggel|lo": {
+      "manggil": 3
+    },
+    "main|bener": {
+      "mau yang": 3
+    },
+    "bener|gak": {
+      "bener": 3,
+      "fix": 3
+    },
+    "gak|lo": {
+      "gak": 3
+    },
+    "gak|sih": {
+      "gak": 3,
+      "pura": 3
+    },
+    "bener|bener": {
+      "Bener": 3
+    },
+    "sih|gak": {
+      "pura": 3
+    },
+    "gak|kelar": {
+      "gak": 3
+    },
+    "kelar|nih": {
+      "dari tadi": 3
+    },
+    "bangsa|$": {
+      "Bangs*t": 3
+    },
+    "gini|gini": {
+      "gini": 2
+    },
+    "gue|juga": {
+      "gue": 2
+    },
+    "gue|kalo": {
+      "gue": 2
+    },
+    "gue|panggil": {
+      "gue": 2
+    },
+    "gue|bilang": {
+      "gue": 2
+    },
+    "gue|umur": {
+      "gue": 2
+    },
+    "gue|umar": {
+      "gue": 2
+    },
+    "gue|tanya": {
+      "gue": 2
+    },
+    "gue|mangglenya": {
+      "gue": 2
+    },
+    "gue|tadi": {
+      "Gue": 2
+    },
+    "gue|berarti": {
+      "gue": 2
+    },
+    "gue|manggil": {
+      "Gue": 2
+    },
+    "sih|ini": {
+      "sih": 2
+    }
+  },
+  "prev_context": {
+    "manggil|brevi": {
+      "Bravy": 3
+    },
+    "bang|cong": {
+      "conk": 3
+    },
+    "lagi|mangg": {
+      "manggil": 3
+    },
+    "mangg|cong": {
+      "cong": 3
+    },
+    "cong|entar": {
+      "ngent*t": 3
+    },
+    "gini|gini": {
+      "gue": 3
+    },
+    "kadang|mangg": {
+      "manggil": 3
+    },
+    "kalo|manggel": {
+      "manggil": 3
+    },
+    "manggel|vicong": {
+      "viconk": 3
+    },
+    "brev|masa": {
+      "masa": 3
+    },
+    "masa|gini": {
+      "gini": 3
+    },
+    "hari|brevi": {
+      "bravy": 3
+    },
+    "gue|umar": {
+      "umur": 3
+    },
+    "tanya|brevi": {
+      "bravy": 3
+    },
+    "brevi|panggel": {
+      "panggil": 3
+    },
+    "aloy|panggila": {
+      "Aloy": 3
+    },
+    "apa|masa": {
+      "masa": 3,
+      "Mas": 3
+    },
+    "dibilang|brevi": {
+      "Bravy": 3
+    },
+    "brevi|panggal": {
+      "panggil": 3
+    },
+    "gue|mangglenya": {
+      "manggilnya": 3
+    },
+    "akong|masa": {
+      "masa": 3
+    },
+    "aja|masa": {
+      "mas": 3,
+      "Mas": 3
+    },
+    "aja|akang": {
+      "Akong": 3
+    },
+    "lo|manggila": {
+      "manggil": 3
+    },
+    "tua|akang": {
+      "lah kan": 3
+    },
+    "akang|lu": {
+      "lu nya": 3
+    },
+    "tua|gue": {
+      "bangs*t": 3
+    },
+    "gue|mangil": {
+      "gue manggil": 3
+    },
+    "mangil|gue": {
+      "gue": 3
+    },
+    "om|gue": {
+      "Gue": 3
+    },
+    "gue|mangel": {
+      "manggil": 3
+    },
+    "mangel|gue": {
+      "gue": 3
+    },
+    "om|gopiak": {
+      "Gobl*k": 3
+    },
+    "yang|manggel": {
+      "manggil": 3
+    },
+    "lo|main": {
+      "mau yang": 3
+    },
+    "main|bener": {
+      "bener": 3
+    },
+    "bener|gak": {
+      "gak": 3,
+      "pura": 3
+    },
+    "pura|gak": {
+      "gak": 3
+    },
+    "ini|bener": {
+      "Bener": 3
+    },
+    "bener|bener": {
+      "fix": 3
+    },
+    "gak|sih": {
+      "pura": 3,
+      "sih": 2
+    },
+    "sih|gak": {
+      "gak": 3
+    },
+    "gak|kelar": {
+      "dari tadi": 3
+    },
+    "nih|bangsa": {
+      "Bangs*t": 3
+    },
+    "selalu|gini": {
+      "gini": 2
+    },
+    "gini|gue": {
+      "gue": 4
+    },
+    "mangg|gue": {
+      "gue": 2
+    },
+    "brev|gue": {
+      "gue": 2
+    },
+    "70|gue": {
+      "gue": 4
+    },
+    "60|gue": {
+      "gue": 4
+    },
+    "iya|gue": {
+      "gue": 2,
+      "Gue": 2
+    },
+    "gitu|gue": {
+      "Gue": 2
+    }
+  },
+  "trigram_context": {
+    "manggil|brevi|berapa": {
+      "Bravy": 3
+    },
+    "bang|cong|oh": {
+      "conk": 3
+    },
+    "lagi|mangg|cong": {
+      "manggil": 3
+    },
+    "mangg|cong|entar": {
+      "cong": 3
+    },
+    "cong|entar|selalu": {
+      "ngent*t": 3
+    },
+    "gini|gini|gue": {
+      "gue": 3
+    },
+    "kadang|mangg|gue": {
+      "manggil": 3
+    },
+    "kalo|manggel|vicong": {
+      "manggil": 3
+    },
+    "manggel|vicong|itu": {
+      "viconk": 3
+    },
+    "brev|masa|gini": {
+      "masa": 3
+    },
+    "masa|gini|gue": {
+      "gini": 3
+    },
+    "hari|brevi|umur": {
+      "bravy": 3
+    },
+    "gue|umar|60": {
+      "umur": 3
+    },
+    "tanya|brevi|panggel": {
+      "bravy": 3
+    },
+    "brevi|panggel|aloy": {
+      "panggil": 3
+    },
+    "aloy|panggila|apa": {
+      "Aloy": 3
+    },
+    "apa|masa|dibilang": {
+      "masa": 3
+    },
+    "dibilang|brevi|panggal": {
+      "Bravy": 3
+    },
+    "brevi|panggal|aloy": {
+      "panggil": 3
+    },
+    "gue|mangglenya|akong": {
+      "manggilnya": 3
+    },
+    "akong|masa|akong": {
+      "masa": 3
+    },
+    "apa|masa|aja": {
+      "Mas": 3
+    },
+    "aja|masa|aja": {
+      "mas": 3,
+      "Mas": 3
+    },
+    "aja|akang|lo": {
+      "Akong": 3
+    },
+    "lo|manggila|akong": {
+      "manggil": 3
+    },
+    "tua|akang|lu": {
+      "lah kan": 3
+    },
+    "akang|lu|juga": {
+      "lu nya": 3
+    },
+    "tua|gue|mangil": {
+      "bangs*t": 3
+    },
+    "gue|mangil|gue": {
+      "gue manggil": 3
+    },
+    "mangil|gue|om": {
+      "gue": 3
+    },
+    "om|gue|mangel": {
+      "Gue": 3
+    },
+    "gue|mangel|gue": {
+      "manggil": 3
+    },
+    "mangel|gue|om": {
+      "gue": 3
+    },
+    "om|gopiak|kan": {
+      "Gobl*k": 3
+    },
+    "yang|manggel|lo": {
+      "manggil": 3
+    },
+    "lo|main|bener": {
+      "mau yang": 3
+    },
+    "main|bener|gak": {
+      "bener": 3
+    },
+    "bener|gak|lo": {
+      "gak": 3
+    },
+    "pura|gak|sih": {
+      "gak": 3
+    },
+    "ini|bener|bener": {
+      "Bener": 3
+    },
+    "bener|bener|gak": {
+      "fix": 3
+    },
+    "bener|gak|sih": {
+      "pura": 3
+    },
+    "gak|sih|gak": {
+      "pura": 3
+    },
+    "sih|gak|kelar": {
+      "gak": 3
+    },
+    "gak|kelar|nih": {
+      "dari tadi": 3
+    },
+    "nih|bangsa|$": {
+      "Bangs*t": 3
+    },
+    "selalu|gini|gini": {
+      "gini": 2
+    },
+    "gini|gue|juga": {
+      "gue": 2
+    },
+    "mangg|gue|kalo": {
+      "gue": 2
+    },
+    "brev|gue|panggil": {
+      "gue": 2
+    },
+    "gini|gue|bilang": {
+      "gue": 2
+    },
+    "70|gue|umur": {
+      "gue": 2
+    },
+    "60|gue|umar": {
+      "gue": 2
+    },
+    "60|gue|tanya": {
+      "gue": 2
+    },
+    "iya|gue|mangglenya": {
+      "gue": 2
+    },
+    "iya|gue|tadi": {
+      "Gue": 2
+    },
+    "70|gue|berarti": {
+      "gue": 2
+    },
+    "gitu|gue|manggil": {
+      "Gue": 2
+    },
+    "gak|sih|ini": {
+      "sih": 2
+    }
+  },
+  "custom_vocab": {
+    "bravy": {
+      "canonical": "Bravy",
+      "count": 24,
+      "phonetic": "brapi"
+    },
+    "conk": {
+      "canonical": "conk",
+      "count": 6,
+      "phonetic": "kunk"
+    },
+    "ngga": {
+      "canonical": "ngga",
+      "count": 3,
+      "phonetic": "nga"
+    },
+    "kagak": {
+      "canonical": "kagak",
+      "count": 3,
+      "phonetic": "kagak"
+    },
+    "kalo": {
+      "canonical": "kalo",
+      "count": 15,
+      "phonetic": "kalu"
+    },
+    "ngent*t": {
+      "canonical": "ngent*t",
+      "count": 6,
+      "phonetic": "nant"
+    },
+    "viconk": {
+      "canonical": "viconk",
+      "count": 6,
+      "phonetic": "pikunk"
+    },
+    "pake": {
+      "canonical": "pake",
+      "count": 3,
+      "phonetic": "paka"
+    },
+    "brev": {
+      "canonical": "brev",
+      "count": 6,
+      "phonetic": "brap"
+    },
+    "aloy": {
+      "canonical": "Aloy",
+      "count": 9,
+      "phonetic": "alui"
+    },
+    "akong": {
+      "canonical": "Akong",
+      "count": 18,
+      "phonetic": "akun"
+    },
+    "gue": {
+      "canonical": "gue",
+      "count": 12,
+      "phonetic": "gua"
+    },
+    "geri": {
+      "canonical": "Geri",
+      "count": 3,
+      "phonetic": "gari"
+    },
+    "mas": {
+      "canonical": "Mas",
+      "count": 15,
+      "phonetic": "mas"
+    },
+    "bangs*t": {
+      "canonical": "Bangs*t",
+      "count": 12,
+      "phonetic": "banst"
+    },
+    "gobl*k": {
+      "canonical": "Gobl*k",
+      "count": 6,
+      "phonetic": "gublk"
+    },
+    "kan": {
+      "canonical": "Kan",
+      "count": 3,
+      "phonetic": "kan"
+    },
+    "kenapa": {
+      "canonical": "Kenapa",
+      "count": 3,
+      "phonetic": "kanapa"
+    },
+    "bener": {
+      "canonical": "Bener",
+      "count": 6,
+      "phonetic": "banar"
+    },
+    "pantesan": {
+      "canonical": "pantesan",
+      "count": 3,
+      "phonetic": "pantasan"
+    },
+    "manggil": {
+      "canonical": "manggil",
+      "count": 18,
+      "phonetic": "mangil"
+    },
+    "umur": {
+      "canonical": "umur",
+      "count": 3,
+      "phonetic": "umur"
+    },
+    "panggil": {
+      "canonical": "panggil",
+      "count": 6,
+      "phonetic": "pangil"
+    },
+    "manggilnya": {
+      "canonical": "manggilnya",
+      "count": 3,
+      "phonetic": "mangilya"
+    },
+    "lah kan": {
+      "canonical": "lah kan",
+      "count": 3,
+      "phonetic": "lahkan"
+    },
+    "lu nya": {
+      "canonical": "lu nya",
+      "count": 3,
+      "phonetic": "luya"
+    },
+    "gue manggil": {
+      "canonical": "gue manggil",
+      "count": 3,
+      "phonetic": "guamangil"
+    },
+    "mau yang": {
+      "canonical": "mau yang",
+      "count": 3,
+      "phonetic": "mauian"
+    },
+    "fix": {
+      "canonical": "fix",
+      "count": 3,
+      "phonetic": "pix"
+    },
+    "pura": {
+      "canonical": "pura",
+      "count": 6,
+      "phonetic": "pura"
+    },
+    "gak": {
+      "canonical": "gak",
+      "count": 3,
+      "phonetic": "gak"
+    },
+    "dari tadi": {
+      "canonical": "dari tadi",
+      "count": 3,
+      "phonetic": "daritadi"
+    }
+  },
+  "approved_words": [
+    "60",
+    "70",
+    "aja",
+    "akong",
+    "aloy",
+    "anjing",
+    "apa",
+    "atau",
+    "bang",
+    "bangs*t",
+    "bener",
+    "berapa",
+    "berarti",
+    "bilang",
+    "bravy",
+    "brev",
+    "cong",
+    "conk",
+    "dari tadi",
+    "dia",
+    "dibilang",
+    "fix",
+    "ga",
+    "ga kelar",
+    "gak",
+    "geri",
+    "gini",
+    "gitu",
+    "gobl*k",
+    "gue",
+    "gue manggil",
+    "hari",
+    "ini",
+    "itu",
+    "iya",
+    "juga",
+    "kadang",
+    "kagak",
+    "kalo",
+    "kan",
+    "kenapa",
+    "lagi",
+    "lah",
+    "lah kan",
+    "lebih",
+    "lo",
+    "lu nya",
+    "manggil",
+    "manggilnya",
+    "mas",
+    "masa",
+    "mau yang",
+    "misalnya",
+    "nanya",
+    "ngent*t",
+    "ngga",
+    "ngobrol",
+    "nih",
+    "ntar",
+    "oh",
+    "om",
+    "orangnya",
+    "pake",
+    "panggil",
+    "pantesan",
+    "pernah",
+    "puluh",
+    "pura",
+    "sama",
+    "sekolah",
+    "selalu",
+    "sih",
+    "suatu",
+    "tadi",
+    "tahun",
+    "tanya",
+    "tapi",
+    "tua",
+    "umur",
+    "viconk",
+    "yang"
+  ],
+  "profiles": {
+    "id": {
+      "total_revisions_trained": 3,
+      "unigram_counts": {
+        "brevi": {
+          "Bravy": 6,
+          "bravy": 6
+        },
+        "cong": {
+          "conk": 3,
+          "cong": 3
+        },
+        "mangg": {
+          "manggil": 6
+        },
+        "entar": {
+          "ngent*t": 3
+        },
+        "gini": {
+          "gue": 3,
+          "gini": 5
+        },
+        "manggel": {
+          "manggil": 6
+        },
+        "vicong": {
+          "viconk": 3
+        },
+        "masa": {
+          "masa": 9,
+          "Mas": 6,
+          "mas": 3
+        },
+        "umar": {
+          "umur": 3
+        },
+        "panggel": {
+          "panggil": 3
+        },
+        "panggila": {
+          "Aloy": 3
+        },
+        "panggal": {
+          "panggil": 3
+        },
+        "mangglenya": {
+          "manggilnya": 3
+        },
+        "akang": {
+          "Akong": 3,
+          "lah kan": 3
+        },
+        "manggila": {
+          "manggil": 3
+        },
+        "lu": {
+          "lu nya": 3
+        },
+        "gue": {
+          "bangs*t": 3,
+          "gue": 24,
+          "Gue": 7
+        },
+        "mangil": {
+          "gue manggil": 3
+        },
+        "mangel": {
+          "manggil": 3
+        },
+        "gopiak": {
+          "Gobl*k": 3
+        },
+        "main": {
+          "mau yang": 3
+        },
+        "bener": {
+          "bener": 3,
+          "Bener": 3,
+          "fix": 3
+        },
+        "gak": {
+          "gak": 9,
+          "pura": 3
+        },
+        "sih": {
+          "pura": 3,
+          "sih": 2
+        },
+        "kelar": {
+          "dari tadi": 3
+        },
+        "bangsa": {
+          "Bangs*t": 3
+        }
+      },
+      "next_context": {
+        "brevi|berapa": {
+          "Bravy": 3
+        },
+        "cong|oh": {
+          "conk": 3
+        },
+        "mangg|cong": {
+          "manggil": 3
+        },
+        "cong|entar": {
+          "cong": 3
+        },
+        "entar|selalu": {
+          "ngent*t": 3
+        },
+        "gini|gue": {
+          "gue": 3,
+          "gini": 3
+        },
+        "mangg|gue": {
+          "manggil": 3
+        },
+        "manggel|vicong": {
+          "manggil": 3
+        },
+        "vicong|itu": {
+          "viconk": 3
+        },
+        "masa|gini": {
+          "masa": 3
+        },
+        "brevi|umur": {
+          "bravy": 3
+        },
+        "umar|60": {
+          "umur": 3
+        },
+        "brevi|panggel": {
+          "bravy": 3
+        },
+        "panggel|aloy": {
+          "panggil": 3
+        },
+        "panggila|apa": {
+          "Aloy": 3
+        },
+        "masa|dibilang": {
+          "masa": 3
+        },
+        "brevi|panggal": {
+          "Bravy": 3
+        },
+        "panggal|aloy": {
+          "panggil": 3
+        },
+        "mangglenya|akong": {
+          "manggilnya": 3
+        },
+        "masa|akong": {
+          "masa": 3
+        },
+        "masa|aja": {
+          "Mas": 6,
+          "mas": 3
+        },
+        "akang|lo": {
+          "Akong": 3
+        },
+        "manggila|akong": {
+          "manggil": 3
+        },
+        "akang|lu": {
+          "lah kan": 3
+        },
+        "lu|juga": {
+          "lu nya": 3
+        },
+        "gue|mangil": {
+          "bangs*t": 3
+        },
+        "mangil|gue": {
+          "gue manggil": 3
+        },
+        "gue|om": {
+          "gue": 6
+        },
+        "gue|mangel": {
+          "Gue": 3
+        },
+        "mangel|gue": {
+          "manggil": 3
+        },
+        "gopiak|kan": {
+          "Gobl*k": 3
+        },
+        "manggel|lo": {
+          "manggil": 3
+        },
+        "main|bener": {
+          "mau yang": 3
+        },
+        "bener|gak": {
+          "bener": 3,
+          "fix": 3
+        },
+        "gak|lo": {
+          "gak": 3
+        },
+        "gak|sih": {
+          "gak": 3,
+          "pura": 3
+        },
+        "bener|bener": {
+          "Bener": 3
+        },
+        "sih|gak": {
+          "pura": 3
+        },
+        "gak|kelar": {
+          "gak": 3
+        },
+        "kelar|nih": {
+          "dari tadi": 3
+        },
+        "bangsa|$": {
+          "Bangs*t": 3
+        },
+        "gini|gini": {
+          "gini": 2
+        },
+        "gue|juga": {
+          "gue": 2
+        },
+        "gue|kalo": {
+          "gue": 2
+        },
+        "gue|panggil": {
+          "gue": 2
+        },
+        "gue|bilang": {
+          "gue": 2
+        },
+        "gue|umur": {
+          "gue": 2
+        },
+        "gue|umar": {
+          "gue": 2
+        },
+        "gue|tanya": {
+          "gue": 2
+        },
+        "gue|mangglenya": {
+          "gue": 2
+        },
+        "gue|tadi": {
+          "Gue": 2
+        },
+        "gue|berarti": {
+          "gue": 2
+        },
+        "gue|manggil": {
+          "Gue": 2
+        },
+        "sih|ini": {
+          "sih": 2
+        }
+      },
+      "prev_context": {
+        "manggil|brevi": {
+          "Bravy": 3
+        },
+        "bang|cong": {
+          "conk": 3
+        },
+        "lagi|mangg": {
+          "manggil": 3
+        },
+        "mangg|cong": {
+          "cong": 3
+        },
+        "cong|entar": {
+          "ngent*t": 3
+        },
+        "gini|gini": {
+          "gue": 3
+        },
+        "kadang|mangg": {
+          "manggil": 3
+        },
+        "kalo|manggel": {
+          "manggil": 3
+        },
+        "manggel|vicong": {
+          "viconk": 3
+        },
+        "brev|masa": {
+          "masa": 3
+        },
+        "masa|gini": {
+          "gini": 3
+        },
+        "hari|brevi": {
+          "bravy": 3
+        },
+        "gue|umar": {
+          "umur": 3
+        },
+        "tanya|brevi": {
+          "bravy": 3
+        },
+        "brevi|panggel": {
+          "panggil": 3
+        },
+        "aloy|panggila": {
+          "Aloy": 3
+        },
+        "apa|masa": {
+          "masa": 3,
+          "Mas": 3
+        },
+        "dibilang|brevi": {
+          "Bravy": 3
+        },
+        "brevi|panggal": {
+          "panggil": 3
+        },
+        "gue|mangglenya": {
+          "manggilnya": 3
+        },
+        "akong|masa": {
+          "masa": 3
+        },
+        "aja|masa": {
+          "mas": 3,
+          "Mas": 3
+        },
+        "aja|akang": {
+          "Akong": 3
+        },
+        "lo|manggila": {
+          "manggil": 3
+        },
+        "tua|akang": {
+          "lah kan": 3
+        },
+        "akang|lu": {
+          "lu nya": 3
+        },
+        "tua|gue": {
+          "bangs*t": 3
+        },
+        "gue|mangil": {
+          "gue manggil": 3
+        },
+        "mangil|gue": {
+          "gue": 3
+        },
+        "om|gue": {
+          "Gue": 3
+        },
+        "gue|mangel": {
+          "manggil": 3
+        },
+        "mangel|gue": {
+          "gue": 3
+        },
+        "om|gopiak": {
+          "Gobl*k": 3
+        },
+        "yang|manggel": {
+          "manggil": 3
+        },
+        "lo|main": {
+          "mau yang": 3
+        },
+        "main|bener": {
+          "bener": 3
+        },
+        "bener|gak": {
+          "gak": 3,
+          "pura": 3
+        },
+        "pura|gak": {
+          "gak": 3
+        },
+        "ini|bener": {
+          "Bener": 3
+        },
+        "bener|bener": {
+          "fix": 3
+        },
+        "gak|sih": {
+          "pura": 3,
+          "sih": 2
+        },
+        "sih|gak": {
+          "gak": 3
+        },
+        "gak|kelar": {
+          "dari tadi": 3
+        },
+        "nih|bangsa": {
+          "Bangs*t": 3
+        },
+        "selalu|gini": {
+          "gini": 2
+        },
+        "gini|gue": {
+          "gue": 4
+        },
+        "mangg|gue": {
+          "gue": 2
+        },
+        "brev|gue": {
+          "gue": 2
+        },
+        "70|gue": {
+          "gue": 4
+        },
+        "60|gue": {
+          "gue": 4
+        },
+        "iya|gue": {
+          "gue": 2,
+          "Gue": 2
+        },
+        "gitu|gue": {
+          "Gue": 2
+        }
+      },
+      "trigram_context": {
+        "manggil|brevi|berapa": {
+          "Bravy": 3
+        },
+        "bang|cong|oh": {
+          "conk": 3
+        },
+        "lagi|mangg|cong": {
+          "manggil": 3
+        },
+        "mangg|cong|entar": {
+          "cong": 3
+        },
+        "cong|entar|selalu": {
+          "ngent*t": 3
+        },
+        "gini|gini|gue": {
+          "gue": 3
+        },
+        "kadang|mangg|gue": {
+          "manggil": 3
+        },
+        "kalo|manggel|vicong": {
+          "manggil": 3
+        },
+        "manggel|vicong|itu": {
+          "viconk": 3
+        },
+        "brev|masa|gini": {
+          "masa": 3
+        },
+        "masa|gini|gue": {
+          "gini": 3
+        },
+        "hari|brevi|umur": {
+          "bravy": 3
+        },
+        "gue|umar|60": {
+          "umur": 3
+        },
+        "tanya|brevi|panggel": {
+          "bravy": 3
+        },
+        "brevi|panggel|aloy": {
+          "panggil": 3
+        },
+        "aloy|panggila|apa": {
+          "Aloy": 3
+        },
+        "apa|masa|dibilang": {
+          "masa": 3
+        },
+        "dibilang|brevi|panggal": {
+          "Bravy": 3
+        },
+        "brevi|panggal|aloy": {
+          "panggil": 3
+        },
+        "gue|mangglenya|akong": {
+          "manggilnya": 3
+        },
+        "akong|masa|akong": {
+          "masa": 3
+        },
+        "apa|masa|aja": {
+          "Mas": 3
+        },
+        "aja|masa|aja": {
+          "mas": 3,
+          "Mas": 3
+        },
+        "aja|akang|lo": {
+          "Akong": 3
+        },
+        "lo|manggila|akong": {
+          "manggil": 3
+        },
+        "tua|akang|lu": {
+          "lah kan": 3
+        },
+        "akang|lu|juga": {
+          "lu nya": 3
+        },
+        "tua|gue|mangil": {
+          "bangs*t": 3
+        },
+        "gue|mangil|gue": {
+          "gue manggil": 3
+        },
+        "mangil|gue|om": {
+          "gue": 3
+        },
+        "om|gue|mangel": {
+          "Gue": 3
+        },
+        "gue|mangel|gue": {
+          "manggil": 3
+        },
+        "mangel|gue|om": {
+          "gue": 3
+        },
+        "om|gopiak|kan": {
+          "Gobl*k": 3
+        },
+        "yang|manggel|lo": {
+          "manggil": 3
+        },
+        "lo|main|bener": {
+          "mau yang": 3
+        },
+        "main|bener|gak": {
+          "bener": 3
+        },
+        "bener|gak|lo": {
+          "gak": 3
+        },
+        "pura|gak|sih": {
+          "gak": 3
+        },
+        "ini|bener|bener": {
+          "Bener": 3
+        },
+        "bener|bener|gak": {
+          "fix": 3
+        },
+        "bener|gak|sih": {
+          "pura": 3
+        },
+        "gak|sih|gak": {
+          "pura": 3
+        },
+        "sih|gak|kelar": {
+          "gak": 3
+        },
+        "gak|kelar|nih": {
+          "dari tadi": 3
+        },
+        "nih|bangsa|$": {
+          "Bangs*t": 3
+        },
+        "selalu|gini|gini": {
+          "gini": 2
+        },
+        "gini|gue|juga": {
+          "gue": 2
+        },
+        "mangg|gue|kalo": {
+          "gue": 2
+        },
+        "brev|gue|panggil": {
+          "gue": 2
+        },
+        "gini|gue|bilang": {
+          "gue": 2
+        },
+        "70|gue|umur": {
+          "gue": 2
+        },
+        "60|gue|umar": {
+          "gue": 2
+        },
+        "60|gue|tanya": {
+          "gue": 2
+        },
+        "iya|gue|mangglenya": {
+          "gue": 2
+        },
+        "iya|gue|tadi": {
+          "Gue": 2
+        },
+        "70|gue|berarti": {
+          "gue": 2
+        },
+        "gitu|gue|manggil": {
+          "Gue": 2
+        },
+        "gak|sih|ini": {
+          "sih": 2
+        }
+      },
+      "custom_vocab": {
+        "bravy": {
+          "canonical": "Bravy",
+          "count": 24,
+          "phonetic": "brapi"
+        },
+        "conk": {
+          "canonical": "conk",
+          "count": 6,
+          "phonetic": "kunk"
+        },
+        "ngga": {
+          "canonical": "ngga",
+          "count": 3,
+          "phonetic": "nga"
+        },
+        "kagak": {
+          "canonical": "kagak",
+          "count": 3,
+          "phonetic": "kagak"
+        },
+        "kalo": {
+          "canonical": "kalo",
+          "count": 15,
+          "phonetic": "kalu"
+        },
+        "ngent*t": {
+          "canonical": "ngent*t",
+          "count": 6,
+          "phonetic": "nant"
+        },
+        "viconk": {
+          "canonical": "viconk",
+          "count": 6,
+          "phonetic": "pikunk"
+        },
+        "pake": {
+          "canonical": "pake",
+          "count": 3,
+          "phonetic": "paka"
+        },
+        "brev": {
+          "canonical": "brev",
+          "count": 6,
+          "phonetic": "brap"
+        },
+        "aloy": {
+          "canonical": "Aloy",
+          "count": 9,
+          "phonetic": "alui"
+        },
+        "akong": {
+          "canonical": "Akong",
+          "count": 18,
+          "phonetic": "akun"
+        },
+        "gue": {
+          "canonical": "gue",
+          "count": 12,
+          "phonetic": "gua"
+        },
+        "geri": {
+          "canonical": "Geri",
+          "count": 3,
+          "phonetic": "gari"
+        },
+        "mas": {
+          "canonical": "Mas",
+          "count": 15,
+          "phonetic": "mas"
+        },
+        "bangs*t": {
+          "canonical": "Bangs*t",
+          "count": 12,
+          "phonetic": "banst"
+        },
+        "gobl*k": {
+          "canonical": "Gobl*k",
+          "count": 6,
+          "phonetic": "gublk"
+        },
+        "kan": {
+          "canonical": "Kan",
+          "count": 3,
+          "phonetic": "kan"
+        },
+        "kenapa": {
+          "canonical": "Kenapa",
+          "count": 3,
+          "phonetic": "kanapa"
+        },
+        "bener": {
+          "canonical": "Bener",
+          "count": 6,
+          "phonetic": "banar"
+        },
+        "pantesan": {
+          "canonical": "pantesan",
+          "count": 3,
+          "phonetic": "pantasan"
+        },
+        "manggil": {
+          "canonical": "manggil",
+          "count": 18,
+          "phonetic": "mangil"
+        },
+        "umur": {
+          "canonical": "umur",
+          "count": 3,
+          "phonetic": "umur"
+        },
+        "panggil": {
+          "canonical": "panggil",
+          "count": 6,
+          "phonetic": "pangil"
+        },
+        "manggilnya": {
+          "canonical": "manggilnya",
+          "count": 3,
+          "phonetic": "mangilya"
+        },
+        "lah kan": {
+          "canonical": "lah kan",
+          "count": 3,
+          "phonetic": "lahkan"
+        },
+        "lu nya": {
+          "canonical": "lu nya",
+          "count": 3,
+          "phonetic": "luya"
+        },
+        "gue manggil": {
+          "canonical": "gue manggil",
+          "count": 3,
+          "phonetic": "guamangil"
+        },
+        "mau yang": {
+          "canonical": "mau yang",
+          "count": 3,
+          "phonetic": "mauian"
+        },
+        "fix": {
+          "canonical": "fix",
+          "count": 3,
+          "phonetic": "pix"
+        },
+        "pura": {
+          "canonical": "pura",
+          "count": 6,
+          "phonetic": "pura"
+        },
+        "gak": {
+          "canonical": "gak",
+          "count": 3,
+          "phonetic": "gak"
+        },
+        "dari tadi": {
+          "canonical": "dari tadi",
+          "count": 3,
+          "phonetic": "daritadi"
+        }
+      },
+      "approved_words": [
+        "60",
+        "70",
+        "aja",
+        "akong",
+        "aloy",
+        "anjing",
+        "apa",
+        "atau",
+        "bang",
+        "bangs*t",
+        "bener",
+        "berapa",
+        "berarti",
+        "bilang",
+        "bravy",
+        "brev",
+        "cong",
+        "conk",
+        "dari tadi",
+        "dia",
+        "dibilang",
+        "fix",
+        "ga",
+        "ga kelar",
+        "gak",
+        "geri",
+        "gini",
+        "gitu",
+        "gobl*k",
+        "gue",
+        "gue manggil",
+        "hari",
+        "ini",
+        "itu",
+        "iya",
+        "juga",
+        "kadang",
+        "kagak",
+        "kalo",
+        "kan",
+        "kenapa",
+        "lagi",
+        "lah",
+        "lah kan",
+        "lebih",
+        "lo",
+        "lu nya",
+        "manggil",
+        "manggilnya",
+        "mas",
+        "masa",
+        "mau yang",
+        "misalnya",
+        "nanya",
+        "ngent*t",
+        "ngga",
+        "ngobrol",
+        "nih",
+        "ntar",
+        "oh",
+        "om",
+        "orangnya",
+        "pake",
+        "panggil",
+        "pantesan",
+        "pernah",
+        "puluh",
+        "pura",
+        "sama",
+        "sekolah",
+        "selalu",
+        "sih",
+        "suatu",
+        "tadi",
+        "tahun",
+        "tanya",
+        "tapi",
+        "tua",
+        "umur",
+        "viconk",
+        "yang"
+      ]
+    },
+    "en": {
+      "total_revisions_trained": 0,
+      "unigram_counts": {},
+      "next_context": {},
+      "prev_context": {},
+      "trigram_context": {},
+      "custom_vocab": {},
+      "approved_words": []
+    }
+  },
+  "active_lang": "id"
+}

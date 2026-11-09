@@ -1,0 +1,1451 @@
+[
+  {
+    "word": "lo",
+    "start": 0.02,
+    "end": 0.1,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggil",
+    "start": 0.1,
+    "end": 0.38,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Bravy",
+    "start": 0.38,
+    "end": 0.68,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "berapa",
+    "start": 0.68,
+    "end": 1.3,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "puluh",
+    "start": 1.3,
+    "end": 1.62,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "tahun",
+    "start": 1.62,
+    "end": 1.86,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bang",
+    "start": 1.92,
+    "end": 2.24,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "conk",
+    "start": 2.36,
+    "end": 2.58,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "oh",
+    "start": 2.76,
+    "end": 3.24,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "ngga",
+    "start": 3.3,
+    "end": 3.62,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bang",
+    "start": 3.68,
+    "end": 3.98,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "kagak",
+    "start": 3.98,
+    "end": 4.76,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "kalo",
+    "start": 4.76,
+    "end": 4.9,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lagi",
+    "start": 4.9,
+    "end": 5.06,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggil",
+    "start": 5.06,
+    "end": 5.26,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "cong",
+    "start": 5.26,
+    "end": 5.78,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "ngent*t",
+    "start": 5.78,
+    "end": 6.0,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "selalu",
+    "start": 6.0,
+    "end": 6.62,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gini",
+    "start": 6.62,
+    "end": 7.5,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 7.56,
+    "end": 7.94,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "juga",
+    "start": 7.94,
+    "end": 8.12,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "kadang",
+    "start": 8.12,
+    "end": 8.4,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggil",
+    "start": 8.4,
+    "end": 8.58,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 8.58,
+    "end": 8.7,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "kalo",
+    "start": 8.7,
+    "end": 8.8,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggil",
+    "start": 8.8,
+    "end": 9.16,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "viconk",
+    "start": 9.16,
+    "end": 10.3,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "itu",
+    "start": 10.34,
+    "end": 10.78,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "ga",
+    "start": 10.78,
+    "end": 10.94,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "pernah",
+    "start": 10.94,
+    "end": 11.06,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "pake",
+    "start": 11.06,
+    "end": 11.24,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bang",
+    "start": 11.24,
+    "end": 11.38,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "tapi",
+    "start": 11.38,
+    "end": 11.94,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "kalo",
+    "start": 11.94,
+    "end": 12.14,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "brev",
+    "start": 12.14,
+    "end": 12.48,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 12.48,
+    "end": 12.56,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "panggil",
+    "start": 12.56,
+    "end": 12.76,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bang",
+    "start": 12.76,
+    "end": 12.9,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "brev",
+    "start": 12.9,
+    "end": 13.18,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "masa",
+    "start": 13.18,
+    "end": 13.76,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gini",
+    "start": 13.76,
+    "end": 14.16,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 14.24,
+    "end": 14.32,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bilang",
+    "start": 14.32,
+    "end": 14.64,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "ntar",
+    "start": 14.7,
+    "end": 14.96,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "kalo",
+    "start": 14.96,
+    "end": 15.1,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "misalnya",
+    "start": 15.1,
+    "end": 15.42,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "suatu",
+    "start": 15.42,
+    "end": 15.64,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "hari",
+    "start": 15.64,
+    "end": 15.9,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bravy",
+    "start": 15.9,
+    "end": 16.3,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "umur",
+    "start": 16.3,
+    "end": 16.56,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "70",
+    "start": 16.56,
+    "end": 16.78,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 16.78,
+    "end": 17.56,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "umur",
+    "start": 17.56,
+    "end": 17.84,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "60",
+    "start": 17.84,
+    "end": 18.1,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 18.1,
+    "end": 18.38,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "umur",
+    "start": 18.38,
+    "end": 18.5,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "60",
+    "start": 18.5,
+    "end": 18.74,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 18.74,
+    "end": 18.94,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "tanya",
+    "start": 18.94,
+    "end": 19.2,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bravy",
+    "start": 19.32,
+    "end": 19.8,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "panggil",
+    "start": 19.8,
+    "end": 20.06,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Aloy",
+    "start": 20.06,
+    "end": 20.22,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "apa",
+    "start": 20.5,
+    "end": 20.7,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "masa",
+    "start": 20.74,
+    "end": 21.02,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "dibilang",
+    "start": 21.02,
+    "end": 21.26,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Bravy",
+    "start": 21.26,
+    "end": 21.48,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "panggil",
+    "start": 21.54,
+    "end": 21.66,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Aloy",
+    "start": 21.66,
+    "end": 21.9,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "om",
+    "start": 21.9,
+    "end": 22.12,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "iya",
+    "start": 22.4,
+    "end": 22.88,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 22.88,
+    "end": 23.12,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggilnya",
+    "start": 23.12,
+    "end": 23.48,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "akong",
+    "start": 23.48,
+    "end": 23.76,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "masa",
+    "start": 23.76,
+    "end": 24.1,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "akong",
+    "start": 24.1,
+    "end": 24.64,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "iya",
+    "start": 24.78,
+    "end": 25.02,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "kalo",
+    "start": 25.02,
+    "end": 25.12,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "ngobrol",
+    "start": 25.12,
+    "end": 25.52,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "sama",
+    "start": 25.52,
+    "end": 25.66,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "orangnya",
+    "start": 25.66,
+    "end": 25.96,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "sekolah",
+    "start": 25.96,
+    "end": 26.34,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "iya",
+    "start": 26.34,
+    "end": 26.88,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Gue",
+    "start": 26.88,
+    "end": 27.5,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "tadi",
+    "start": 27.5,
+    "end": 27.68,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "nanya",
+    "start": 27.68,
+    "end": 28.06,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "sama",
+    "start": 28.06,
+    "end": 28.12,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Geri",
+    "start": 28.12,
+    "end": 28.46,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lo",
+    "start": 28.5,
+    "end": 28.6,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "umur",
+    "start": 28.6,
+    "end": 28.76,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "70",
+    "start": 28.76,
+    "end": 28.92,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 29.28,
+    "end": 29.44,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "berarti",
+    "start": 29.44,
+    "end": 29.82,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "kan",
+    "start": 29.82,
+    "end": 29.94,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "umur",
+    "start": 29.94,
+    "end": 30.42,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "60",
+    "start": 30.42,
+    "end": 30.74,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gitu",
+    "start": 30.74,
+    "end": 31.06,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Gue",
+    "start": 31.06,
+    "end": 31.2,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggil",
+    "start": 31.2,
+    "end": 31.44,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lo",
+    "start": 31.44,
+    "end": 31.52,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "akong",
+    "start": 31.52,
+    "end": 31.84,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "atau",
+    "start": 31.84,
+    "end": 32.0,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "apa",
+    "start": 32.0,
+    "end": 32.2,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Mas",
+    "start": 33.62,
+    "end": 34.06,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "aja",
+    "start": 34.06,
+    "end": 34.48,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "mas",
+    "start": 34.74,
+    "end": 35.04,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "aja",
+    "start": 35.04,
+    "end": 35.74,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Mas",
+    "start": 35.74,
+    "end": 36.12,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "aja",
+    "start": 36.12,
+    "end": 36.12,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Akong",
+    "start": 36.66,
+    "end": 37.1,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lo",
+    "start": 37.1,
+    "end": 37.2,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggil",
+    "start": 37.2,
+    "end": 37.42,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Akong",
+    "start": 37.98,
+    "end": 38.42,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lah",
+    "start": 38.42,
+    "end": 38.52,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "tua",
+    "start": 38.52,
+    "end": 38.78,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lah kan",
+    "start": 38.78,
+    "end": 39.4,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lu nya",
+    "start": 39.4,
+    "end": 39.5,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "juga",
+    "start": 39.5,
+    "end": 39.64,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "tua",
+    "start": 39.64,
+    "end": 39.98,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bangs*t",
+    "start": 39.98,
+    "end": 40.56,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue manggil",
+    "start": 40.56,
+    "end": 41.04,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 41.04,
+    "end": 41.16,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "om",
+    "start": 41.16,
+    "end": 41.38,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Gue",
+    "start": 41.38,
+    "end": 42.02,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggil",
+    "start": 42.02,
+    "end": 43.1,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 43.1,
+    "end": 43.2,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "om",
+    "start": 43.2,
+    "end": 43.46,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Gobl*k",
+    "start": 43.46,
+    "end": 43.98,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Kan",
+    "start": 43.98,
+    "end": 44.86,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "yang",
+    "start": 44.86,
+    "end": 45.0,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lebih",
+    "start": 45.0,
+    "end": 45.14,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "tua",
+    "start": 45.14,
+    "end": 45.38,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "tadi",
+    "start": 45.38,
+    "end": 45.56,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lo",
+    "start": 45.56,
+    "end": 45.78,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Kenapa",
+    "start": 45.78,
+    "end": 46.26,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "dia",
+    "start": 46.26,
+    "end": 46.4,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "yang",
+    "start": 46.4,
+    "end": 46.52,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggil",
+    "start": 46.52,
+    "end": 46.74,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lo",
+    "start": 46.74,
+    "end": 46.84,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "om",
+    "start": 46.84,
+    "end": 47.1,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Lo",
+    "start": 47.16,
+    "end": 47.54,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "mau yang",
+    "start": 47.54,
+    "end": 47.74,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bener",
+    "start": 47.74,
+    "end": 48.02,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gak",
+    "start": 48.02,
+    "end": 48.12,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Lo",
+    "start": 48.4,
+    "end": 48.84,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "pura",
+    "start": 48.84,
+    "end": 49.1,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "pura",
+    "start": 49.1,
+    "end": 49.28,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gak",
+    "start": 49.28,
+    "end": 49.4,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "sih",
+    "start": 49.4,
+    "end": 49.54,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "ini",
+    "start": 49.54,
+    "end": 49.68,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Bener",
+    "start": 49.98,
+    "end": 50.42,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "fix",
+    "start": 50.42,
+    "end": 50.68,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "pura",
+    "start": 50.68,
+    "end": 50.86,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "pura",
+    "start": 50.86,
+    "end": 51.06,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "dia",
+    "start": 51.06,
+    "end": 51.24,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "anjing",
+    "start": 51.24,
+    "end": 51.62,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gak",
+    "start": 51.68,
+    "end": 51.95,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "pantesan",
+    "start": 51.95,
+    "end": 52.38,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "dari tadi",
+    "start": 52.38,
+    "end": 52.63,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "ga kelar",
+    "start": 52.63,
+    "end": 52.85,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "nih",
+    "start": 52.85,
+    "end": 53.04,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Bangs*t",
+    "start": 53.04,
+    "end": 53.52,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  }
+]

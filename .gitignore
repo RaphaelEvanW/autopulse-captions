@@ -1,0 +1,35 @@
+# Virtualenv & Python cache
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Local runtime state & hardware cache
+hardware_profile.json
+last_run.json
+
+# Media & temporary test outputs (do not push large videos/renders to GitHub)
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.mp3
+*.wav
+*.png
+*.jpg
+*_raw_words.json
+e2e_test*
+final.ass
+final_words.json
+goldpulse_output.ass
+sample_output.ass
+sample_words.json
+story_words.json
+test_output.ass
+test_video.ass
+test_video_words.json
+test_words.json
+v2.ass
+v2_inspected.ass
+v2_words.json
+run_test.py

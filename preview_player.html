@@ -1,0 +1,4171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GoldPulse Studio - Live Preview & Word Inspector</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0b0d11;
+      color: #f3f4f6;
+      font-family: system-ui, -apple-system, sans-serif;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    .header {
+      max-width: 1200px;
+      margin: 0 auto 16px auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 1px solid #1f2430;
+      padding-bottom: 14px;
+    }
+    .header h1 { font-size: 1.25rem; font-weight: 700; }
+    .header p.sub { color: #9ca3af; font-size: 0.85rem; margin-top: 2px; }
+    .top-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 8px 13px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.82rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+    .btn:hover { background: #1d4ed8; }
+    .btn.secondary { background: #27272a; color: #e4e4e7; }
+    .btn.secondary:hover { background: #3f3f46; }
+    .btn.success { background: #059669; }
+    .btn.success:hover { background: #047857; }
+    .btn.warning { background: #d97706; }
+    .btn.warning:hover { background: #b45309; }
+
+    .workspace {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .workspace { grid-template-columns: 1fr; justify-items: center; }
+    }
+
+    /* Kolom Kiri: Video Preview */
+    .preview-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: sticky;
+      top: 20px;
+    }
+    .phone-frame {
+      position: relative;
+      width: 360px;
+      height: 640px;
+      background: radial-gradient(circle at 50% 35%, #2b2118 0%, #090a0c 75%);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.75);
+      border: 2px solid #27272a;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .caption-overlay {
+      position: absolute;
+      left: 50%;
+      bottom: 24%;
+      transform: translateX(-50%);
+      width: 92%;
+      text-align: center;
+      pointer-events: none;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.4px;
+      line-height: 1.15;
+      color: #FFFFFF;
+      -webkit-text-stroke: 1.25px #000000;
+      paint-order: stroke fill;
+      text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.95),
+        0 0 9px rgba(0, 0, 0, 0.85),
+        1.8px 1.8px 0 #000,
+        -1.8px -1.8px 0 #000,
+        1.8px -1.8px 0 #000,
+        -1.8px 1.8px 0 #000;
+      white-space: nowrap;
+    }
+    .caption-overlay .active {
+      color: #F5B82E;
+    }
+    .timeline-bar {
+      margin-top: 10px;
+      font-family: monospace;
+      color: #fbbf24;
+      font-size: 0.9rem;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    /* Kolom Kanan: Word Inspector & Editor */
+    .editor-col {
+      background: #13161c;
+      border: 1px solid #222631;
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 685px;
+      width: 100%;
+    }
+    .editor-toolbar {
+      padding: 14px 16px;
+      background: #181c24;
+      border-bottom: 1px solid #252a37;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+    }
+    .tab-btn {
+      background: #222733;
+      color: #9ca3af;
+      border: 1px solid #2e3444;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: #2563eb;
+      color: #fff;
+      border-color: #3b82f6;
+    }
+    .tab-btn.suspect-tab.active {
+      background: #dc2626;
+      border-color: #ef4444;
+      color: #fff;
+    }
+    .badge-count {
+      background: rgba(0,0,0,0.35);
+      padding: 1px 6px;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      margin-left: 4px;
+    }
+
+    .word-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .word-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      background: #191d26;
+      border: 1px solid #262b38;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .word-row.playing {
+      border-color: #fbbf24;
+      background: #232019;
+    }
+    .word-row.suspect {
+      border-color: #f59e0b;
+      background: #241b15;
+    }
+    .word-main {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .time-chip {
+      font-family: monospace;
+      font-size: 0.78rem;
+      background: #0f1117;
+      color: #93c5fd;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid #1e293b;
+      user-select: none;
+    }
+    .time-chip:hover {
+      background: #1e3a8a;
+      color: #fff;
+    }
+    .word-input {
+      background: #0d0f14;
+      color: #fff;
+      border: 1px solid #32394a;
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      width: 150px;
+    }
+    .time-input {
+      background: #0d0f14;
+      color: #93c5fd;
+      border: 1px solid #283142;
+      border-radius: 5px;
+      padding: 4px 5px;
+      font-family: monospace;
+      font-size: 0.76rem;
+      width: 58px;
+      text-align: center;
+    }
+    .time-input:focus {
+      outline: none;
+      border-color: #60a5fa;
+      color: #fff;
+    }
+    .word-input:focus {
+      outline: none;
+      border-color: #60a5fa;
+    }
+    .word-row.suspect .word-input {
+      border-color: #f59e0b;
+      color: #fde68a;
+    }
+    .mini-btn {
+      background: #262b38;
+      color: #cbd5e1;
+      border: 1px solid #363d4f;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+    .mini-btn:hover { background: #363d4f; color: #fff; }
+    .mini-btn.clause-on {
+      background: #1e3a8a;
+      color: #93c5fd;
+      border-color: #3b82f6;
+    }
+    .mini-btn.danger:hover {
+      background: #7f1d1d;
+      border-color: #dc2626;
+      color: #fecaca;
+    }
+    .suspect-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 0.78rem;
+      color: #fcd34d;
+      background: rgba(245, 158, 11, 0.12);
+      padding: 5px 9px;
+      border-radius: 6px;
+    }
+    .fix-chip {
+      background: #059669;
+      color: #fff;
+      border: none;
+      padding: 3px 9px;
+      border-radius: 5px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .fix-chip:hover { background: #047857; }
+    .editor-footer {
+      padding: 10px 16px;
+      background: #181c24;
+      border-top: 1px solid #252a37;
+      font-size: 0.78rem;
+      color: #9ca3af;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>GoldPulse Studio &mdash; Live Preview &amp; Word Inspector <span id="mlStatusBadge" style="font-size:0.74rem;background:#1e3a8a;color:#93c5fd;padding:3px 10px;border-radius:999px;vertical-align:middle;margin-left:8px;border:1px solid #3b82f6;">🧠 Mini-ML Active</span></h1>
+      <p class="sub">Klik timestamp kata untuk dengar suaranya &bull; Edit kata otomatis melatih memori Mini-ML &bull; Deteksi Konteks N-Gram &amp; Fonetik</p>
+    </div>
+    <div class="top-actions">
+      <label class="btn secondary">
+        📂 Pilih Video (.mp4)
+        <input type="file" id="videoInput" accept="video/*" style="display:none">
+      </label>
+      <label class="btn secondary">
+        📂 Load words.json
+        <input type="file" id="jsonInput" accept=".json" style="display:none">
+      </label>
+      <button class="btn warning" id="autoFixAllBtn">✨ Auto-Fix Semua Saran</button>
+      <button class="btn" id="downloadJsonBtn">💾 Simpan words.json</button>
+      <button class="btn success" id="downloadAssBtn">💾 Download .ass (Siap Burn)</button>
+    </div>
+  </div>
+
+  <div class="workspace">
+    <!-- Kiri: Video Player + Live GoldPulse Caption -->
+    <div class="preview-col">
+      <div class="phone-frame">
+        <video id="videoPlayer" src="test_video.mp4" playsinline controls></video>
+        <div class="caption-overlay" id="captionBox"></div>
+      </div>
+      <div class="timeline-bar">
+        <span id="timeDisplay">00:00.00 / 00:53.52</span>
+        <button class="mini-btn" id="replayChunkBtn">&#8634; Ulang 2 Detik</button>
+      </div>
+    </div>
+
+    <!-- Kanan: Interactive Word Inspector -->
+    <div class="editor-col">
+      <div class="editor-toolbar">
+        <div class="filter-tabs">
+          <button class="tab-btn active" id="tabAll">
+            Semua Kata <span class="badge-count" id="countAll">0</span>
+          </button>
+          <button class="tab-btn suspect-tab" id="tabSuspect">
+            ⚠️ Mencurigakan / Salah Dengar <span class="badge-count" id="countSuspect">0</span>
+          </button>
+        </div>
+        <div>
+          <input type="text" id="searchWordInput" placeholder="Cari kata..." class="word-input" style="width:140px;font-weight:400;font-size:0.82rem;">
+        </div>
+      </div>
+
+      <div class="word-list" id="wordListContainer"></div>
+
+      <div class="editor-footer">
+        <span>Tips: Tombol <b>&crarr; Baris</b> memaksa potong baris baru setelah kata tersebut.</span>
+        <span id="chunkStats">0 potongan frasa</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Kata Default (Diupdate otomatis oleh generate_captions.py) -->
+  <script id="defaultWordsData" type="application/json">
+[
+  {
+    "word": "lo",
+    "start": 0.02,
+    "end": 0.1,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggil",
+    "start": 0.1,
+    "end": 0.38,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Bravy",
+    "start": 0.38,
+    "end": 0.68,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "berapa",
+    "start": 0.68,
+    "end": 1.3,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "puluh",
+    "start": 1.3,
+    "end": 1.62,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "tahun",
+    "start": 1.62,
+    "end": 1.86,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bang",
+    "start": 1.92,
+    "end": 2.24,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "conk",
+    "start": 2.36,
+    "end": 2.58,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "oh",
+    "start": 2.76,
+    "end": 3.24,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "ngga",
+    "start": 3.3,
+    "end": 3.62,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bang",
+    "start": 3.68,
+    "end": 3.98,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "kagak",
+    "start": 3.98,
+    "end": 4.76,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "kalo",
+    "start": 4.76,
+    "end": 4.9,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lagi",
+    "start": 4.9,
+    "end": 5.06,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggil",
+    "start": 5.06,
+    "end": 5.26,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "cong",
+    "start": 5.26,
+    "end": 5.78,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "ngent*t",
+    "start": 5.78,
+    "end": 6.0,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "selalu",
+    "start": 6.0,
+    "end": 6.62,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gini",
+    "start": 6.62,
+    "end": 7.5,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 7.56,
+    "end": 7.94,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "juga",
+    "start": 7.94,
+    "end": 8.12,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "kadang",
+    "start": 8.12,
+    "end": 8.4,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggil",
+    "start": 8.4,
+    "end": 8.58,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 8.58,
+    "end": 8.7,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "kalo",
+    "start": 8.7,
+    "end": 8.8,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggil",
+    "start": 8.8,
+    "end": 9.16,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "viconk",
+    "start": 9.16,
+    "end": 10.3,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "itu",
+    "start": 10.34,
+    "end": 10.78,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "ga",
+    "start": 10.78,
+    "end": 10.94,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "pernah",
+    "start": 10.94,
+    "end": 11.06,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "pake",
+    "start": 11.06,
+    "end": 11.24,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bang",
+    "start": 11.24,
+    "end": 11.38,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "tapi",
+    "start": 11.38,
+    "end": 11.94,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "kalo",
+    "start": 11.94,
+    "end": 12.14,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "brev",
+    "start": 12.14,
+    "end": 12.48,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 12.48,
+    "end": 12.56,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "panggil",
+    "start": 12.56,
+    "end": 12.76,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bang",
+    "start": 12.76,
+    "end": 12.9,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "brev",
+    "start": 12.9,
+    "end": 13.18,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "masa",
+    "start": 13.18,
+    "end": 13.76,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gini",
+    "start": 13.76,
+    "end": 14.16,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 14.24,
+    "end": 14.32,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bilang",
+    "start": 14.32,
+    "end": 14.64,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "ntar",
+    "start": 14.7,
+    "end": 14.96,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "kalo",
+    "start": 14.96,
+    "end": 15.1,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "misalnya",
+    "start": 15.1,
+    "end": 15.42,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "suatu",
+    "start": 15.42,
+    "end": 15.64,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "hari",
+    "start": 15.64,
+    "end": 15.9,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bravy",
+    "start": 15.9,
+    "end": 16.3,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "umur",
+    "start": 16.3,
+    "end": 16.56,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "70",
+    "start": 16.56,
+    "end": 16.78,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 16.78,
+    "end": 17.56,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "umur",
+    "start": 17.56,
+    "end": 17.84,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "60",
+    "start": 17.84,
+    "end": 18.1,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 18.1,
+    "end": 18.38,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "umur",
+    "start": 18.38,
+    "end": 18.5,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "60",
+    "start": 18.5,
+    "end": 18.74,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 18.74,
+    "end": 18.94,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "tanya",
+    "start": 18.94,
+    "end": 19.2,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bravy",
+    "start": 19.32,
+    "end": 19.8,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "panggil",
+    "start": 19.8,
+    "end": 20.06,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Aloy",
+    "start": 20.06,
+    "end": 20.22,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "apa",
+    "start": 20.5,
+    "end": 20.7,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "masa",
+    "start": 20.74,
+    "end": 21.02,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "dibilang",
+    "start": 21.02,
+    "end": 21.26,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Bravy",
+    "start": 21.26,
+    "end": 21.48,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "panggil",
+    "start": 21.54,
+    "end": 21.66,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Aloy",
+    "start": 21.66,
+    "end": 21.9,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "om",
+    "start": 21.9,
+    "end": 22.12,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "iya",
+    "start": 22.4,
+    "end": 22.88,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 22.88,
+    "end": 23.12,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggilnya",
+    "start": 23.12,
+    "end": 23.48,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "akong",
+    "start": 23.48,
+    "end": 23.76,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "masa",
+    "start": 23.76,
+    "end": 24.1,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "akong",
+    "start": 24.1,
+    "end": 24.64,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "iya",
+    "start": 24.78,
+    "end": 25.02,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "kalo",
+    "start": 25.02,
+    "end": 25.12,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "ngobrol",
+    "start": 25.12,
+    "end": 25.52,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "sama",
+    "start": 25.52,
+    "end": 25.66,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "orangnya",
+    "start": 25.66,
+    "end": 25.96,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "sekolah",
+    "start": 25.96,
+    "end": 26.34,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "iya",
+    "start": 26.34,
+    "end": 26.88,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Gue",
+    "start": 26.88,
+    "end": 27.5,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "tadi",
+    "start": 27.5,
+    "end": 27.68,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "nanya",
+    "start": 27.68,
+    "end": 28.06,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "sama",
+    "start": 28.06,
+    "end": 28.12,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Geri",
+    "start": 28.12,
+    "end": 28.46,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lo",
+    "start": 28.5,
+    "end": 28.6,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "umur",
+    "start": 28.6,
+    "end": 28.76,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "70",
+    "start": 28.76,
+    "end": 28.92,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 29.28,
+    "end": 29.44,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "berarti",
+    "start": 29.44,
+    "end": 29.82,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "kan",
+    "start": 29.82,
+    "end": 29.94,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "umur",
+    "start": 29.94,
+    "end": 30.42,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "60",
+    "start": 30.42,
+    "end": 30.74,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gitu",
+    "start": 30.74,
+    "end": 31.06,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Gue",
+    "start": 31.06,
+    "end": 31.2,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggil",
+    "start": 31.2,
+    "end": 31.44,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lo",
+    "start": 31.44,
+    "end": 31.52,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "akong",
+    "start": 31.52,
+    "end": 31.84,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "atau",
+    "start": 31.84,
+    "end": 32.0,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "apa",
+    "start": 32.0,
+    "end": 32.2,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Mas",
+    "start": 33.62,
+    "end": 34.06,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "aja",
+    "start": 34.06,
+    "end": 34.48,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "mas",
+    "start": 34.74,
+    "end": 35.04,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "aja",
+    "start": 35.04,
+    "end": 35.74,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Mas",
+    "start": 35.74,
+    "end": 36.12,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "aja",
+    "start": 36.12,
+    "end": 36.12,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Akong",
+    "start": 36.66,
+    "end": 37.1,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lo",
+    "start": 37.1,
+    "end": 37.2,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggil",
+    "start": 37.2,
+    "end": 37.42,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Akong",
+    "start": 37.98,
+    "end": 38.42,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lah",
+    "start": 38.42,
+    "end": 38.52,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "tua",
+    "start": 38.52,
+    "end": 38.78,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lah kan",
+    "start": 38.78,
+    "end": 39.4,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lu nya",
+    "start": 39.4,
+    "end": 39.5,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "juga",
+    "start": 39.5,
+    "end": 39.64,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "tua",
+    "start": 39.64,
+    "end": 39.98,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bangs*t",
+    "start": 39.98,
+    "end": 40.56,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue manggil",
+    "start": 40.56,
+    "end": 41.04,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 41.04,
+    "end": 41.16,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "om",
+    "start": 41.16,
+    "end": 41.38,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Gue",
+    "start": 41.38,
+    "end": 42.02,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggil",
+    "start": 42.02,
+    "end": 43.1,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gue",
+    "start": 43.1,
+    "end": 43.2,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "om",
+    "start": 43.2,
+    "end": 43.46,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Gobl*k",
+    "start": 43.46,
+    "end": 43.98,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Kan",
+    "start": 43.98,
+    "end": 44.86,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "yang",
+    "start": 44.86,
+    "end": 45.0,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lebih",
+    "start": 45.0,
+    "end": 45.14,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "tua",
+    "start": 45.14,
+    "end": 45.38,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "tadi",
+    "start": 45.38,
+    "end": 45.56,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lo",
+    "start": 45.56,
+    "end": 45.78,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Kenapa",
+    "start": 45.78,
+    "end": 46.26,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "dia",
+    "start": 46.26,
+    "end": 46.4,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "yang",
+    "start": 46.4,
+    "end": 46.52,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "manggil",
+    "start": 46.52,
+    "end": 46.74,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "lo",
+    "start": 46.74,
+    "end": 46.84,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "om",
+    "start": 46.84,
+    "end": 47.1,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Lo",
+    "start": 47.16,
+    "end": 47.54,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "mau yang",
+    "start": 47.54,
+    "end": 47.74,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "bener",
+    "start": 47.74,
+    "end": 48.02,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gak",
+    "start": 48.02,
+    "end": 48.12,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Lo",
+    "start": 48.4,
+    "end": 48.84,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "pura",
+    "start": 48.84,
+    "end": 49.1,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "pura",
+    "start": 49.1,
+    "end": 49.28,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gak",
+    "start": 49.28,
+    "end": 49.4,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "sih",
+    "start": 49.4,
+    "end": 49.54,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "ini",
+    "start": 49.54,
+    "end": 49.68,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Bener",
+    "start": 49.98,
+    "end": 50.42,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "fix",
+    "start": 50.42,
+    "end": 50.68,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "pura",
+    "start": 50.68,
+    "end": 50.86,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "pura",
+    "start": 50.86,
+    "end": 51.06,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "dia",
+    "start": 51.06,
+    "end": 51.24,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "anjing",
+    "start": 51.24,
+    "end": 51.62,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "gak",
+    "start": 51.68,
+    "end": 51.95,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "pantesan",
+    "start": 51.95,
+    "end": 52.38,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "dari tadi",
+    "start": 52.38,
+    "end": 52.63,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "ga kelar",
+    "start": 52.63,
+    "end": 52.85,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "nih",
+    "start": 52.85,
+    "end": 53.04,
+    "ends_clause": false,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  },
+  {
+    "word": "Bangs*t",
+    "start": 53.04,
+    "end": 53.52,
+    "ends_clause": true,
+    "suspect": false,
+    "reason": "",
+    "suggestion": ""
+  }
+]
+  </script>
+
+  <script id="learnedMemoryData" type="application/json">
+{
+  "version": 1,
+  "total_revisions_trained": 3,
+  "unigram_counts": {
+    "brevi": {
+      "Bravy": 6,
+      "bravy": 6
+    },
+    "cong": {
+      "conk": 3,
+      "cong": 3
+    },
+    "mangg": {
+      "manggil": 6
+    },
+    "entar": {
+      "ngent*t": 3
+    },
+    "gini": {
+      "gue": 3,
+      "gini": 5
+    },
+    "manggel": {
+      "manggil": 6
+    },
+    "vicong": {
+      "viconk": 3
+    },
+    "masa": {
+      "masa": 9,
+      "Mas": 6,
+      "mas": 3
+    },
+    "umar": {
+      "umur": 3
+    },
+    "panggel": {
+      "panggil": 3
+    },
+    "panggila": {
+      "Aloy": 3
+    },
+    "panggal": {
+      "panggil": 3
+    },
+    "mangglenya": {
+      "manggilnya": 3
+    },
+    "akang": {
+      "Akong": 3,
+      "lah kan": 3
+    },
+    "manggila": {
+      "manggil": 3
+    },
+    "lu": {
+      "lu nya": 3
+    },
+    "gue": {
+      "bangs*t": 3,
+      "gue": 24,
+      "Gue": 7
+    },
+    "mangil": {
+      "gue manggil": 3
+    },
+    "mangel": {
+      "manggil": 3
+    },
+    "gopiak": {
+      "Gobl*k": 3
+    },
+    "main": {
+      "mau yang": 3
+    },
+    "bener": {
+      "bener": 3,
+      "Bener": 3,
+      "fix": 3
+    },
+    "gak": {
+      "gak": 9,
+      "pura": 3
+    },
+    "sih": {
+      "pura": 3,
+      "sih": 2
+    },
+    "kelar": {
+      "dari tadi": 3
+    },
+    "bangsa": {
+      "Bangs*t": 3
+    }
+  },
+  "next_context": {
+    "brevi|berapa": {
+      "Bravy": 3
+    },
+    "cong|oh": {
+      "conk": 3
+    },
+    "mangg|cong": {
+      "manggil": 3
+    },
+    "cong|entar": {
+      "cong": 3
+    },
+    "entar|selalu": {
+      "ngent*t": 3
+    },
+    "gini|gue": {
+      "gue": 3,
+      "gini": 3
+    },
+    "mangg|gue": {
+      "manggil": 3
+    },
+    "manggel|vicong": {
+      "manggil": 3
+    },
+    "vicong|itu": {
+      "viconk": 3
+    },
+    "masa|gini": {
+      "masa": 3
+    },
+    "brevi|umur": {
+      "bravy": 3
+    },
+    "umar|60": {
+      "umur": 3
+    },
+    "brevi|panggel": {
+      "bravy": 3
+    },
+    "panggel|aloy": {
+      "panggil": 3
+    },
+    "panggila|apa": {
+      "Aloy": 3
+    },
+    "masa|dibilang": {
+      "masa": 3
+    },
+    "brevi|panggal": {
+      "Bravy": 3
+    },
+    "panggal|aloy": {
+      "panggil": 3
+    },
+    "mangglenya|akong": {
+      "manggilnya": 3
+    },
+    "masa|akong": {
+      "masa": 3
+    },
+    "masa|aja": {
+      "Mas": 6,
+      "mas": 3
+    },
+    "akang|lo": {
+      "Akong": 3
+    },
+    "manggila|akong": {
+      "manggil": 3
+    },
+    "akang|lu": {
+      "lah kan": 3
+    },
+    "lu|juga": {
+      "lu nya": 3
+    },
+    "gue|mangil": {
+      "bangs*t": 3
+    },
+    "mangil|gue": {
+      "gue manggil": 3
+    },
+    "gue|om": {
+      "gue": 6
+    },
+    "gue|mangel": {
+      "Gue": 3
+    },
+    "mangel|gue": {
+      "manggil": 3
+    },
+    "gopiak|kan": {
+      "Gobl*k": 3
+    },
+    "manggel|lo": {
+      "manggil": 3
+    },
+    "main|bener": {
+      "mau yang": 3
+    },
+    "bener|gak": {
+      "bener": 3,
+      "fix": 3
+    },
+    "gak|lo": {
+      "gak": 3
+    },
+    "gak|sih": {
+      "gak": 3,
+      "pura": 3
+    },
+    "bener|bener": {
+      "Bener": 3
+    },
+    "sih|gak": {
+      "pura": 3
+    },
+    "gak|kelar": {
+      "gak": 3
+    },
+    "kelar|nih": {
+      "dari tadi": 3
+    },
+    "bangsa|$": {
+      "Bangs*t": 3
+    },
+    "gini|gini": {
+      "gini": 2
+    },
+    "gue|juga": {
+      "gue": 2
+    },
+    "gue|kalo": {
+      "gue": 2
+    },
+    "gue|panggil": {
+      "gue": 2
+    },
+    "gue|bilang": {
+      "gue": 2
+    },
+    "gue|umur": {
+      "gue": 2
+    },
+    "gue|umar": {
+      "gue": 2
+    },
+    "gue|tanya": {
+      "gue": 2
+    },
+    "gue|mangglenya": {
+      "gue": 2
+    },
+    "gue|tadi": {
+      "Gue": 2
+    },
+    "gue|berarti": {
+      "gue": 2
+    },
+    "gue|manggil": {
+      "Gue": 2
+    },
+    "sih|ini": {
+      "sih": 2
+    }
+  },
+  "prev_context": {
+    "manggil|brevi": {
+      "Bravy": 3
+    },
+    "bang|cong": {
+      "conk": 3
+    },
+    "lagi|mangg": {
+      "manggil": 3
+    },
+    "mangg|cong": {
+      "cong": 3
+    },
+    "cong|entar": {
+      "ngent*t": 3
+    },
+    "gini|gini": {
+      "gue": 3
+    },
+    "kadang|mangg": {
+      "manggil": 3
+    },
+    "kalo|manggel": {
+      "manggil": 3
+    },
+    "manggel|vicong": {
+      "viconk": 3
+    },
+    "brev|masa": {
+      "masa": 3
+    },
+    "masa|gini": {
+      "gini": 3
+    },
+    "hari|brevi": {
+      "bravy": 3
+    },
+    "gue|umar": {
+      "umur": 3
+    },
+    "tanya|brevi": {
+      "bravy": 3
+    },
+    "brevi|panggel": {
+      "panggil": 3
+    },
+    "aloy|panggila": {
+      "Aloy": 3
+    },
+    "apa|masa": {
+      "masa": 3,
+      "Mas": 3
+    },
+    "dibilang|brevi": {
+      "Bravy": 3
+    },
+    "brevi|panggal": {
+      "panggil": 3
+    },
+    "gue|mangglenya": {
+      "manggilnya": 3
+    },
+    "akong|masa": {
+      "masa": 3
+    },
+    "aja|masa": {
+      "mas": 3,
+      "Mas": 3
+    },
+    "aja|akang": {
+      "Akong": 3
+    },
+    "lo|manggila": {
+      "manggil": 3
+    },
+    "tua|akang": {
+      "lah kan": 3
+    },
+    "akang|lu": {
+      "lu nya": 3
+    },
+    "tua|gue": {
+      "bangs*t": 3
+    },
+    "gue|mangil": {
+      "gue manggil": 3
+    },
+    "mangil|gue": {
+      "gue": 3
+    },
+    "om|gue": {
+      "Gue": 3
+    },
+    "gue|mangel": {
+      "manggil": 3
+    },
+    "mangel|gue": {
+      "gue": 3
+    },
+    "om|gopiak": {
+      "Gobl*k": 3
+    },
+    "yang|manggel": {
+      "manggil": 3
+    },
+    "lo|main": {
+      "mau yang": 3
+    },
+    "main|bener": {
+      "bener": 3
+    },
+    "bener|gak": {
+      "gak": 3,
+      "pura": 3
+    },
+    "pura|gak": {
+      "gak": 3
+    },
+    "ini|bener": {
+      "Bener": 3
+    },
+    "bener|bener": {
+      "fix": 3
+    },
+    "gak|sih": {
+      "pura": 3,
+      "sih": 2
+    },
+    "sih|gak": {
+      "gak": 3
+    },
+    "gak|kelar": {
+      "dari tadi": 3
+    },
+    "nih|bangsa": {
+      "Bangs*t": 3
+    },
+    "selalu|gini": {
+      "gini": 2
+    },
+    "gini|gue": {
+      "gue": 4
+    },
+    "mangg|gue": {
+      "gue": 2
+    },
+    "brev|gue": {
+      "gue": 2
+    },
+    "70|gue": {
+      "gue": 4
+    },
+    "60|gue": {
+      "gue": 4
+    },
+    "iya|gue": {
+      "gue": 2,
+      "Gue": 2
+    },
+    "gitu|gue": {
+      "Gue": 2
+    }
+  },
+  "trigram_context": {
+    "manggil|brevi|berapa": {
+      "Bravy": 3
+    },
+    "bang|cong|oh": {
+      "conk": 3
+    },
+    "lagi|mangg|cong": {
+      "manggil": 3
+    },
+    "mangg|cong|entar": {
+      "cong": 3
+    },
+    "cong|entar|selalu": {
+      "ngent*t": 3
+    },
+    "gini|gini|gue": {
+      "gue": 3
+    },
+    "kadang|mangg|gue": {
+      "manggil": 3
+    },
+    "kalo|manggel|vicong": {
+      "manggil": 3
+    },
+    "manggel|vicong|itu": {
+      "viconk": 3
+    },
+    "brev|masa|gini": {
+      "masa": 3
+    },
+    "masa|gini|gue": {
+      "gini": 3
+    },
+    "hari|brevi|umur": {
+      "bravy": 3
+    },
+    "gue|umar|60": {
+      "umur": 3
+    },
+    "tanya|brevi|panggel": {
+      "bravy": 3
+    },
+    "brevi|panggel|aloy": {
+      "panggil": 3
+    },
+    "aloy|panggila|apa": {
+      "Aloy": 3
+    },
+    "apa|masa|dibilang": {
+      "masa": 3
+    },
+    "dibilang|brevi|panggal": {
+      "Bravy": 3
+    },
+    "brevi|panggal|aloy": {
+      "panggil": 3
+    },
+    "gue|mangglenya|akong": {
+      "manggilnya": 3
+    },
+    "akong|masa|akong": {
+      "masa": 3
+    },
+    "apa|masa|aja": {
+      "Mas": 3
+    },
+    "aja|masa|aja": {
+      "mas": 3,
+      "Mas": 3
+    },
+    "aja|akang|lo": {
+      "Akong": 3
+    },
+    "lo|manggila|akong": {
+      "manggil": 3
+    },
+    "tua|akang|lu": {
+      "lah kan": 3
+    },
+    "akang|lu|juga": {
+      "lu nya": 3
+    },
+    "tua|gue|mangil": {
+      "bangs*t": 3
+    },
+    "gue|mangil|gue": {
+      "gue manggil": 3
+    },
+    "mangil|gue|om": {
+      "gue": 3
+    },
+    "om|gue|mangel": {
+      "Gue": 3
+    },
+    "gue|mangel|gue": {
+      "manggil": 3
+    },
+    "mangel|gue|om": {
+      "gue": 3
+    },
+    "om|gopiak|kan": {
+      "Gobl*k": 3
+    },
+    "yang|manggel|lo": {
+      "manggil": 3
+    },
+    "lo|main|bener": {
+      "mau yang": 3
+    },
+    "main|bener|gak": {
+      "bener": 3
+    },
+    "bener|gak|lo": {
+      "gak": 3
+    },
+    "pura|gak|sih": {
+      "gak": 3
+    },
+    "ini|bener|bener": {
+      "Bener": 3
+    },
+    "bener|bener|gak": {
+      "fix": 3
+    },
+    "bener|gak|sih": {
+      "pura": 3
+    },
+    "gak|sih|gak": {
+      "pura": 3
+    },
+    "sih|gak|kelar": {
+      "gak": 3
+    },
+    "gak|kelar|nih": {
+      "dari tadi": 3
+    },
+    "nih|bangsa|$": {
+      "Bangs*t": 3
+    },
+    "selalu|gini|gini": {
+      "gini": 2
+    },
+    "gini|gue|juga": {
+      "gue": 2
+    },
+    "mangg|gue|kalo": {
+      "gue": 2
+    },
+    "brev|gue|panggil": {
+      "gue": 2
+    },
+    "gini|gue|bilang": {
+      "gue": 2
+    },
+    "70|gue|umur": {
+      "gue": 2
+    },
+    "60|gue|umar": {
+      "gue": 2
+    },
+    "60|gue|tanya": {
+      "gue": 2
+    },
+    "iya|gue|mangglenya": {
+      "gue": 2
+    },
+    "iya|gue|tadi": {
+      "Gue": 2
+    },
+    "70|gue|berarti": {
+      "gue": 2
+    },
+    "gitu|gue|manggil": {
+      "Gue": 2
+    },
+    "gak|sih|ini": {
+      "sih": 2
+    }
+  },
+  "custom_vocab": {
+    "bravy": {
+      "canonical": "Bravy",
+      "count": 24,
+      "phonetic": "brapi"
+    },
+    "conk": {
+      "canonical": "conk",
+      "count": 6,
+      "phonetic": "kunk"
+    },
+    "ngga": {
+      "canonical": "ngga",
+      "count": 3,
+      "phonetic": "nga"
+    },
+    "kagak": {
+      "canonical": "kagak",
+      "count": 3,
+      "phonetic": "kagak"
+    },
+    "kalo": {
+      "canonical": "kalo",
+      "count": 15,
+      "phonetic": "kalu"
+    },
+    "ngent*t": {
+      "canonical": "ngent*t",
+      "count": 6,
+      "phonetic": "nant"
+    },
+    "viconk": {
+      "canonical": "viconk",
+      "count": 6,
+      "phonetic": "pikunk"
+    },
+    "pake": {
+      "canonical": "pake",
+      "count": 3,
+      "phonetic": "paka"
+    },
+    "brev": {
+      "canonical": "brev",
+      "count": 6,
+      "phonetic": "brap"
+    },
+    "aloy": {
+      "canonical": "Aloy",
+      "count": 9,
+      "phonetic": "alui"
+    },
+    "akong": {
+      "canonical": "Akong",
+      "count": 18,
+      "phonetic": "akun"
+    },
+    "gue": {
+      "canonical": "gue",
+      "count": 12,
+      "phonetic": "gua"
+    },
+    "geri": {
+      "canonical": "Geri",
+      "count": 3,
+      "phonetic": "gari"
+    },
+    "mas": {
+      "canonical": "Mas",
+      "count": 15,
+      "phonetic": "mas"
+    },
+    "bangs*t": {
+      "canonical": "Bangs*t",
+      "count": 12,
+      "phonetic": "banst"
+    },
+    "gobl*k": {
+      "canonical": "Gobl*k",
+      "count": 6,
+      "phonetic": "gublk"
+    },
+    "kan": {
+      "canonical": "Kan",
+      "count": 3,
+      "phonetic": "kan"
+    },
+    "kenapa": {
+      "canonical": "Kenapa",
+      "count": 3,
+      "phonetic": "kanapa"
+    },
+    "bener": {
+      "canonical": "Bener",
+      "count": 6,
+      "phonetic": "banar"
+    },
+    "pantesan": {
+      "canonical": "pantesan",
+      "count": 3,
+      "phonetic": "pantasan"
+    },
+    "manggil": {
+      "canonical": "manggil",
+      "count": 18,
+      "phonetic": "mangil"
+    },
+    "umur": {
+      "canonical": "umur",
+      "count": 3,
+      "phonetic": "umur"
+    },
+    "panggil": {
+      "canonical": "panggil",
+      "count": 6,
+      "phonetic": "pangil"
+    },
+    "manggilnya": {
+      "canonical": "manggilnya",
+      "count": 3,
+      "phonetic": "mangilya"
+    },
+    "lah kan": {
+      "canonical": "lah kan",
+      "count": 3,
+      "phonetic": "lahkan"
+    },
+    "lu nya": {
+      "canonical": "lu nya",
+      "count": 3,
+      "phonetic": "luya"
+    },
+    "gue manggil": {
+      "canonical": "gue manggil",
+      "count": 3,
+      "phonetic": "guamangil"
+    },
+    "mau yang": {
+      "canonical": "mau yang",
+      "count": 3,
+      "phonetic": "mauian"
+    },
+    "fix": {
+      "canonical": "fix",
+      "count": 3,
+      "phonetic": "pix"
+    },
+    "pura": {
+      "canonical": "pura",
+      "count": 6,
+      "phonetic": "pura"
+    },
+    "gak": {
+      "canonical": "gak",
+      "count": 3,
+      "phonetic": "gak"
+    },
+    "dari tadi": {
+      "canonical": "dari tadi",
+      "count": 3,
+      "phonetic": "daritadi"
+    }
+  },
+  "approved_words": [
+    "60",
+    "70",
+    "aja",
+    "akong",
+    "aloy",
+    "anjing",
+    "apa",
+    "atau",
+    "bang",
+    "bangs*t",
+    "bener",
+    "berapa",
+    "berarti",
+    "bilang",
+    "bravy",
+    "brev",
+    "cong",
+    "conk",
+    "dari tadi",
+    "dia",
+    "dibilang",
+    "fix",
+    "ga",
+    "ga kelar",
+    "gak",
+    "geri",
+    "gini",
+    "gitu",
+    "gobl*k",
+    "gue",
+    "gue manggil",
+    "hari",
+    "ini",
+    "itu",
+    "iya",
+    "juga",
+    "kadang",
+    "kagak",
+    "kalo",
+    "kan",
+    "kenapa",
+    "lagi",
+    "lah",
+    "lah kan",
+    "lebih",
+    "lo",
+    "lu nya",
+    "manggil",
+    "manggilnya",
+    "mas",
+    "masa",
+    "mau yang",
+    "misalnya",
+    "nanya",
+    "ngent*t",
+    "ngga",
+    "ngobrol",
+    "nih",
+    "ntar",
+    "oh",
+    "om",
+    "orangnya",
+    "pake",
+    "panggil",
+    "pantesan",
+    "pernah",
+    "puluh",
+    "pura",
+    "sama",
+    "sekolah",
+    "selalu",
+    "sih",
+    "suatu",
+    "tadi",
+    "tahun",
+    "tanya",
+    "tapi",
+    "tua",
+    "umur",
+    "viconk",
+    "yang"
+  ],
+  "profiles": {
+    "id": {
+      "total_revisions_trained": 3,
+      "unigram_counts": {
+        "brevi": {
+          "Bravy": 6,
+          "bravy": 6
+        },
+        "cong": {
+          "conk": 3,
+          "cong": 3
+        },
+        "mangg": {
+          "manggil": 6
+        },
+        "entar": {
+          "ngent*t": 3
+        },
+        "gini": {
+          "gue": 3,
+          "gini": 5
+        },
+        "manggel": {
+          "manggil": 6
+        },
+        "vicong": {
+          "viconk": 3
+        },
+        "masa": {
+          "masa": 9,
+          "Mas": 6,
+          "mas": 3
+        },
+        "umar": {
+          "umur": 3
+        },
+        "panggel": {
+          "panggil": 3
+        },
+        "panggila": {
+          "Aloy": 3
+        },
+        "panggal": {
+          "panggil": 3
+        },
+        "mangglenya": {
+          "manggilnya": 3
+        },
+        "akang": {
+          "Akong": 3,
+          "lah kan": 3
+        },
+        "manggila": {
+          "manggil": 3
+        },
+        "lu": {
+          "lu nya": 3
+        },
+        "gue": {
+          "bangs*t": 3,
+          "gue": 24,
+          "Gue": 7
+        },
+        "mangil": {
+          "gue manggil": 3
+        },
+        "mangel": {
+          "manggil": 3
+        },
+        "gopiak": {
+          "Gobl*k": 3
+        },
+        "main": {
+          "mau yang": 3
+        },
+        "bener": {
+          "bener": 3,
+          "Bener": 3,
+          "fix": 3
+        },
+        "gak": {
+          "gak": 9,
+          "pura": 3
+        },
+        "sih": {
+          "pura": 3,
+          "sih": 2
+        },
+        "kelar": {
+          "dari tadi": 3
+        },
+        "bangsa": {
+          "Bangs*t": 3
+        }
+      },
+      "next_context": {
+        "brevi|berapa": {
+          "Bravy": 3
+        },
+        "cong|oh": {
+          "conk": 3
+        },
+        "mangg|cong": {
+          "manggil": 3
+        },
+        "cong|entar": {
+          "cong": 3
+        },
+        "entar|selalu": {
+          "ngent*t": 3
+        },
+        "gini|gue": {
+          "gue": 3,
+          "gini": 3
+        },
+        "mangg|gue": {
+          "manggil": 3
+        },
+        "manggel|vicong": {
+          "manggil": 3
+        },
+        "vicong|itu": {
+          "viconk": 3
+        },
+        "masa|gini": {
+          "masa": 3
+        },
+        "brevi|umur": {
+          "bravy": 3
+        },
+        "umar|60": {
+          "umur": 3
+        },
+        "brevi|panggel": {
+          "bravy": 3
+        },
+        "panggel|aloy": {
+          "panggil": 3
+        },
+        "panggila|apa": {
+          "Aloy": 3
+        },
+        "masa|dibilang": {
+          "masa": 3
+        },
+        "brevi|panggal": {
+          "Bravy": 3
+        },
+        "panggal|aloy": {
+          "panggil": 3
+        },
+        "mangglenya|akong": {
+          "manggilnya": 3
+        },
+        "masa|akong": {
+          "masa": 3
+        },
+        "masa|aja": {
+          "Mas": 6,
+          "mas": 3
+        },
+        "akang|lo": {
+          "Akong": 3
+        },
+        "manggila|akong": {
+          "manggil": 3
+        },
+        "akang|lu": {
+          "lah kan": 3
+        },
+        "lu|juga": {
+          "lu nya": 3
+        },
+        "gue|mangil": {
+          "bangs*t": 3
+        },
+        "mangil|gue": {
+          "gue manggil": 3
+        },
+        "gue|om": {
+          "gue": 6
+        },
+        "gue|mangel": {
+          "Gue": 3
+        },
+        "mangel|gue": {
+          "manggil": 3
+        },
+        "gopiak|kan": {
+          "Gobl*k": 3
+        },
+        "manggel|lo": {
+          "manggil": 3
+        },
+        "main|bener": {
+          "mau yang": 3
+        },
+        "bener|gak": {
+          "bener": 3,
+          "fix": 3
+        },
+        "gak|lo": {
+          "gak": 3
+        },
+        "gak|sih": {
+          "gak": 3,
+          "pura": 3
+        },
+        "bener|bener": {
+          "Bener": 3
+        },
+        "sih|gak": {
+          "pura": 3
+        },
+        "gak|kelar": {
+          "gak": 3
+        },
+        "kelar|nih": {
+          "dari tadi": 3
+        },
+        "bangsa|$": {
+          "Bangs*t": 3
+        },
+        "gini|gini": {
+          "gini": 2
+        },
+        "gue|juga": {
+          "gue": 2
+        },
+        "gue|kalo": {
+          "gue": 2
+        },
+        "gue|panggil": {
+          "gue": 2
+        },
+        "gue|bilang": {
+          "gue": 2
+        },
+        "gue|umur": {
+          "gue": 2
+        },
+        "gue|umar": {
+          "gue": 2
+        },
+        "gue|tanya": {
+          "gue": 2
+        },
+        "gue|mangglenya": {
+          "gue": 2
+        },
+        "gue|tadi": {
+          "Gue": 2
+        },
+        "gue|berarti": {
+          "gue": 2
+        },
+        "gue|manggil": {
+          "Gue": 2
+        },
+        "sih|ini": {
+          "sih": 2
+        }
+      },
+      "prev_context": {
+        "manggil|brevi": {
+          "Bravy": 3
+        },
+        "bang|cong": {
+          "conk": 3
+        },
+        "lagi|mangg": {
+          "manggil": 3
+        },
+        "mangg|cong": {
+          "cong": 3
+        },
+        "cong|entar": {
+          "ngent*t": 3
+        },
+        "gini|gini": {
+          "gue": 3
+        },
+        "kadang|mangg": {
+          "manggil": 3
+        },
+        "kalo|manggel": {
+          "manggil": 3
+        },
+        "manggel|vicong": {
+          "viconk": 3
+        },
+        "brev|masa": {
+          "masa": 3
+        },
+        "masa|gini": {
+          "gini": 3
+        },
+        "hari|brevi": {
+          "bravy": 3
+        },
+        "gue|umar": {
+          "umur": 3
+        },
+        "tanya|brevi": {
+          "bravy": 3
+        },
+        "brevi|panggel": {
+          "panggil": 3
+        },
+        "aloy|panggila": {
+          "Aloy": 3
+        },
+        "apa|masa": {
+          "masa": 3,
+          "Mas": 3
+        },
+        "dibilang|brevi": {
+          "Bravy": 3
+        },
+        "brevi|panggal": {
+          "panggil": 3
+        },
+        "gue|mangglenya": {
+          "manggilnya": 3
+        },
+        "akong|masa": {
+          "masa": 3
+        },
+        "aja|masa": {
+          "mas": 3,
+          "Mas": 3
+        },
+        "aja|akang": {
+          "Akong": 3
+        },
+        "lo|manggila": {
+          "manggil": 3
+        },
+        "tua|akang": {
+          "lah kan": 3
+        },
+        "akang|lu": {
+          "lu nya": 3
+        },
+        "tua|gue": {
+          "bangs*t": 3
+        },
+        "gue|mangil": {
+          "gue manggil": 3
+        },
+        "mangil|gue": {
+          "gue": 3
+        },
+        "om|gue": {
+          "Gue": 3
+        },
+        "gue|mangel": {
+          "manggil": 3
+        },
+        "mangel|gue": {
+          "gue": 3
+        },
+        "om|gopiak": {
+          "Gobl*k": 3
+        },
+        "yang|manggel": {
+          "manggil": 3
+        },
+        "lo|main": {
+          "mau yang": 3
+        },
+        "main|bener": {
+          "bener": 3
+        },
+        "bener|gak": {
+          "gak": 3,
+          "pura": 3
+        },
+        "pura|gak": {
+          "gak": 3
+        },
+        "ini|bener": {
+          "Bener": 3
+        },
+        "bener|bener": {
+          "fix": 3
+        },
+        "gak|sih": {
+          "pura": 3,
+          "sih": 2
+        },
+        "sih|gak": {
+          "gak": 3
+        },
+        "gak|kelar": {
+          "dari tadi": 3
+        },
+        "nih|bangsa": {
+          "Bangs*t": 3
+        },
+        "selalu|gini": {
+          "gini": 2
+        },
+        "gini|gue": {
+          "gue": 4
+        },
+        "mangg|gue": {
+          "gue": 2
+        },
+        "brev|gue": {
+          "gue": 2
+        },
+        "70|gue": {
+          "gue": 4
+        },
+        "60|gue": {
+          "gue": 4
+        },
+        "iya|gue": {
+          "gue": 2,
+          "Gue": 2
+        },
+        "gitu|gue": {
+          "Gue": 2
+        }
+      },
+      "trigram_context": {
+        "manggil|brevi|berapa": {
+          "Bravy": 3
+        },
+        "bang|cong|oh": {
+          "conk": 3
+        },
+        "lagi|mangg|cong": {
+          "manggil": 3
+        },
+        "mangg|cong|entar": {
+          "cong": 3
+        },
+        "cong|entar|selalu": {
+          "ngent*t": 3
+        },
+        "gini|gini|gue": {
+          "gue": 3
+        },
+        "kadang|mangg|gue": {
+          "manggil": 3
+        },
+        "kalo|manggel|vicong": {
+          "manggil": 3
+        },
+        "manggel|vicong|itu": {
+          "viconk": 3
+        },
+        "brev|masa|gini": {
+          "masa": 3
+        },
+        "masa|gini|gue": {
+          "gini": 3
+        },
+        "hari|brevi|umur": {
+          "bravy": 3
+        },
+        "gue|umar|60": {
+          "umur": 3
+        },
+        "tanya|brevi|panggel": {
+          "bravy": 3
+        },
+        "brevi|panggel|aloy": {
+          "panggil": 3
+        },
+        "aloy|panggila|apa": {
+          "Aloy": 3
+        },
+        "apa|masa|dibilang": {
+          "masa": 3
+        },
+        "dibilang|brevi|panggal": {
+          "Bravy": 3
+        },
+        "brevi|panggal|aloy": {
+          "panggil": 3
+        },
+        "gue|mangglenya|akong": {
+          "manggilnya": 3
+        },
+        "akong|masa|akong": {
+          "masa": 3
+        },
+        "apa|masa|aja": {
+          "Mas": 3
+        },
+        "aja|masa|aja": {
+          "mas": 3,
+          "Mas": 3
+        },
+        "aja|akang|lo": {
+          "Akong": 3
+        },
+        "lo|manggila|akong": {
+          "manggil": 3
+        },
+        "tua|akang|lu": {
+          "lah kan": 3
+        },
+        "akang|lu|juga": {
+          "lu nya": 3
+        },
+        "tua|gue|mangil": {
+          "bangs*t": 3
+        },
+        "gue|mangil|gue": {
+          "gue manggil": 3
+        },
+        "mangil|gue|om": {
+          "gue": 3
+        },
+        "om|gue|mangel": {
+          "Gue": 3
+        },
+        "gue|mangel|gue": {
+          "manggil": 3
+        },
+        "mangel|gue|om": {
+          "gue": 3
+        },
+        "om|gopiak|kan": {
+          "Gobl*k": 3
+        },
+        "yang|manggel|lo": {
+          "manggil": 3
+        },
+        "lo|main|bener": {
+          "mau yang": 3
+        },
+        "main|bener|gak": {
+          "bener": 3
+        },
+        "bener|gak|lo": {
+          "gak": 3
+        },
+        "pura|gak|sih": {
+          "gak": 3
+        },
+        "ini|bener|bener": {
+          "Bener": 3
+        },
+        "bener|bener|gak": {
+          "fix": 3
+        },
+        "bener|gak|sih": {
+          "pura": 3
+        },
+        "gak|sih|gak": {
+          "pura": 3
+        },
+        "sih|gak|kelar": {
+          "gak": 3
+        },
+        "gak|kelar|nih": {
+          "dari tadi": 3
+        },
+        "nih|bangsa|$": {
+          "Bangs*t": 3
+        },
+        "selalu|gini|gini": {
+          "gini": 2
+        },
+        "gini|gue|juga": {
+          "gue": 2
+        },
+        "mangg|gue|kalo": {
+          "gue": 2
+        },
+        "brev|gue|panggil": {
+          "gue": 2
+        },
+        "gini|gue|bilang": {
+          "gue": 2
+        },
+        "70|gue|umur": {
+          "gue": 2
+        },
+        "60|gue|umar": {
+          "gue": 2
+        },
+        "60|gue|tanya": {
+          "gue": 2
+        },
+        "iya|gue|mangglenya": {
+          "gue": 2
+        },
+        "iya|gue|tadi": {
+          "Gue": 2
+        },
+        "70|gue|berarti": {
+          "gue": 2
+        },
+        "gitu|gue|manggil": {
+          "Gue": 2
+        },
+        "gak|sih|ini": {
+          "sih": 2
+        }
+      },
+      "custom_vocab": {
+        "bravy": {
+          "canonical": "Bravy",
+          "count": 24,
+          "phonetic": "brapi"
+        },
+        "conk": {
+          "canonical": "conk",
+          "count": 6,
+          "phonetic": "kunk"
+        },
+        "ngga": {
+          "canonical": "ngga",
+          "count": 3,
+          "phonetic": "nga"
+        },
+        "kagak": {
+          "canonical": "kagak",
+          "count": 3,
+          "phonetic": "kagak"
+        },
+        "kalo": {
+          "canonical": "kalo",
+          "count": 15,
+          "phonetic": "kalu"
+        },
+        "ngent*t": {
+          "canonical": "ngent*t",
+          "count": 6,
+          "phonetic": "nant"
+        },
+        "viconk": {
+          "canonical": "viconk",
+          "count": 6,
+          "phonetic": "pikunk"
+        },
+        "pake": {
+          "canonical": "pake",
+          "count": 3,
+          "phonetic": "paka"
+        },
+        "brev": {
+          "canonical": "brev",
+          "count": 6,
+          "phonetic": "brap"
+        },
+        "aloy": {
+          "canonical": "Aloy",
+          "count": 9,
+          "phonetic": "alui"
+        },
+        "akong": {
+          "canonical": "Akong",
+          "count": 18,
+          "phonetic": "akun"
+        },
+        "gue": {
+          "canonical": "gue",
+          "count": 12,
+          "phonetic": "gua"
+        },
+        "geri": {
+          "canonical": "Geri",
+          "count": 3,
+          "phonetic": "gari"
+        },
+        "mas": {
+          "canonical": "Mas",
+          "count": 15,
+          "phonetic": "mas"
+        },
+        "bangs*t": {
+          "canonical": "Bangs*t",
+          "count": 12,
+          "phonetic": "banst"
+        },
+        "gobl*k": {
+          "canonical": "Gobl*k",
+          "count": 6,
+          "phonetic": "gublk"
+        },
+        "kan": {
+          "canonical": "Kan",
+          "count": 3,
+          "phonetic": "kan"
+        },
+        "kenapa": {
+          "canonical": "Kenapa",
+          "count": 3,
+          "phonetic": "kanapa"
+        },
+        "bener": {
+          "canonical": "Bener",
+          "count": 6,
+          "phonetic": "banar"
+        },
+        "pantesan": {
+          "canonical": "pantesan",
+          "count": 3,
+          "phonetic": "pantasan"
+        },
+        "manggil": {
+          "canonical": "manggil",
+          "count": 18,
+          "phonetic": "mangil"
+        },
+        "umur": {
+          "canonical": "umur",
+          "count": 3,
+          "phonetic": "umur"
+        },
+        "panggil": {
+          "canonical": "panggil",
+          "count": 6,
+          "phonetic": "pangil"
+        },
+        "manggilnya": {
+          "canonical": "manggilnya",
+          "count": 3,
+          "phonetic": "mangilya"
+        },
+        "lah kan": {
+          "canonical": "lah kan",
+          "count": 3,
+          "phonetic": "lahkan"
+        },
+        "lu nya": {
+          "canonical": "lu nya",
+          "count": 3,
+          "phonetic": "luya"
+        },
+        "gue manggil": {
+          "canonical": "gue manggil",
+          "count": 3,
+          "phonetic": "guamangil"
+        },
+        "mau yang": {
+          "canonical": "mau yang",
+          "count": 3,
+          "phonetic": "mauian"
+        },
+        "fix": {
+          "canonical": "fix",
+          "count": 3,
+          "phonetic": "pix"
+        },
+        "pura": {
+          "canonical": "pura",
+          "count": 6,
+          "phonetic": "pura"
+        },
+        "gak": {
+          "canonical": "gak",
+          "count": 3,
+          "phonetic": "gak"
+        },
+        "dari tadi": {
+          "canonical": "dari tadi",
+          "count": 3,
+          "phonetic": "daritadi"
+        }
+      },
+      "approved_words": [
+        "60",
+        "70",
+        "aja",
+        "akong",
+        "aloy",
+        "anjing",
+        "apa",
+        "atau",
+        "bang",
+        "bangs*t",
+        "bener",
+        "berapa",
+        "berarti",
+        "bilang",
+        "bravy",
+        "brev",
+        "cong",
+        "conk",
+        "dari tadi",
+        "dia",
+        "dibilang",
+        "fix",
+        "ga",
+        "ga kelar",
+        "gak",
+        "geri",
+        "gini",
+        "gitu",
+        "gobl*k",
+        "gue",
+        "gue manggil",
+        "hari",
+        "ini",
+        "itu",
+        "iya",
+        "juga",
+        "kadang",
+        "kagak",
+        "kalo",
+        "kan",
+        "kenapa",
+        "lagi",
+        "lah",
+        "lah kan",
+        "lebih",
+        "lo",
+        "lu nya",
+        "manggil",
+        "manggilnya",
+        "mas",
+        "masa",
+        "mau yang",
+        "misalnya",
+        "nanya",
+        "ngent*t",
+        "ngga",
+        "ngobrol",
+        "nih",
+        "ntar",
+        "oh",
+        "om",
+        "orangnya",
+        "pake",
+        "panggil",
+        "pantesan",
+        "pernah",
+        "puluh",
+        "pura",
+        "sama",
+        "sekolah",
+        "selalu",
+        "sih",
+        "suatu",
+        "tadi",
+        "tahun",
+        "tanya",
+        "tapi",
+        "tua",
+        "umur",
+        "viconk",
+        "yang"
+      ]
+    },
+    "en": {
+      "total_revisions_trained": 0,
+      "unigram_counts": {},
+      "next_context": {},
+      "prev_context": {},
+      "trigram_context": {},
+      "custom_vocab": {},
+      "approved_words": []
+    }
+  },
+  "active_lang": "id"
+}
+  </script>
+
+  <script>
+    const PRESET_CONFIG = {
+      playResX: 1080,
+      playResY: 1920,
+      fontName: "Montserrat",
+      fontSize: 63,
+      inactiveColor: "&HFFFFFF&",
+      activeColor: "&H2EB8F5&",
+      outlineColor: "&H00000000",
+      shadowColor: "&H96000000",
+      outlineWidth: 3.6,
+      shadowDepth: 3.2,
+      marginV: 460,
+      maxWordsPerChunk: 3,
+      maxCharsPerChunk: 22,
+      pauseThresholdSec: 0.35
+    };
+
+    const SLANG_SUSPECT_MAP = {
+      "mangg": ["manggil", "Kata terpotong di akhir"],
+      "manggel": ["manggil", "Pelesetan fonetik 'manggil'"],
+      "manggila": ["manggil", "Halusinasi vokal akhir Whisper"],
+      "mangil": ["manggil", "Kurang huruf 'g'"],
+      "mangel": ["manggil", "Pelesetan fonetik 'manggil'"],
+      "mangglenya": ["manggilnya", "Typo fonetik 'manggilnya'"],
+      "panggel": ["panggil", "Pelesetan fonetik 'panggil'"],
+      "panggal": ["panggil", "Pelesetan fonetik 'panggil'"],
+      "panggila": ["panggilnya", "Salah dengar 'panggilnya'"],
+      "umar": ["umur", "Salah dengar 'umur'"],
+      "gopiak": ["Goblok", "Sensor otomatis Whisper untuk 'Goblok'"],
+      "bangsa": ["bangsat", "Sensor otomatis Whisper untuk 'bangsat'"],
+      "bangso": ["bangsat", "Sensor otomatis Whisper untuk 'bangsat'"],
+      "brevi": ["Bravy", "Ejaan nama 'Bravy'"],
+      "vicong": ["Viconk", "Ejaan nama 'Viconk'"]
+    };
+
+    let words = [];
+    let cues = [];
+    let filterMode = "all"; // "all" | "suspect"
+    let searchQuery = "";
+    let activeWordIndex = -1;
+
+    const videoPlayer = document.getElementById("videoPlayer");
+    const captionBox = document.getElementById("captionBox");
+    const timeDisplay = document.getElementById("timeDisplay");
+    const wordListContainer = document.getElementById("wordListContainer");
+    const countAll = document.getElementById("countAll");
+    const countSuspect = document.getElementById("countSuspect");
+    const chunkStats = document.getElementById("chunkStats");
+    const tabAll = document.getElementById("tabAll");
+    const tabSuspect = document.getElementById("tabSuspect");
+    const searchWordInput = document.getElementById("searchWordInput");
+
+    let learnedMemory = {
+      unigram_counts: {},
+      next_context: {},
+      prev_context: {},
+      trigram_context: {},
+      custom_vocab: {},
+      total_revisions_trained: 0
+    };
+    try {
+      const el = document.getElementById("learnedMemoryData");
+      if (el && el.textContent.trim()) {
+        learnedMemory = JSON.parse(el.textContent.trim());
+      }
+      const savedLocal = localStorage.getItem("goldpulse_learned_memory");
+      if (savedLocal) {
+        const parsedLocal = JSON.parse(savedLocal);
+        if ((parsedLocal.total_revisions_trained || 0) > (learnedMemory.total_revisions_trained || 0)) {
+          learnedMemory = parsedLocal;
+        }
+      }
+    } catch (e) {}
+
+    function updateMlBadge() {
+      const badge = document.getElementById("mlStatusBadge");
+      if (!badge) return;
+      const vocabCount = Object.keys(learnedMemory.custom_vocab || {}).length;
+      const ruleCount = Object.keys(learnedMemory.unigram_counts || {}).length + Object.keys(learnedMemory.next_context || {}).length;
+      badge.textContent = `🧠 Mini-ML: ${ruleCount} Pola Konteks & ${vocabCount} Kosakata`;
+    }
+
+    function predictFromBucket(bucket) {
+      if (!bucket) return [null, 0, 0];
+      let total = 0;
+      let bestWord = null;
+      let bestCnt = -1;
+      for (const [k, v] of Object.entries(bucket)) {
+        const c = Number(v) || 0;
+        total += c;
+        if (c > bestCnt) { bestCnt = c; bestWord = k; }
+      }
+      if (total <= 0) return [null, 0, 0];
+      return [bestWord, bestCnt / total, total];
+    }
+
+    const EN_MARKERS = new Set(["the","and","to","of","in","is","that","it","for","you","was","with","on","have","but","not","they","this","from","when","what","your","would","could","should","because","people","never","always","really","scared","disappoint","i'm","i've","don't","can't","didn't","it's"]);
+    const ID_MARKERS = new Set(["yang","di","dan","ini","itu","dengan","untuk","tidak","dari","gue","gua","lo","lu","kalo","kalau","gak","ga","nggak","ngga","kagak","aja","sama","udah","manggil","panggil","umur","bang","mas","om","anjing","bangsat"]);
+    const EN_SUSPECT_MAP = {
+      "im": ["I'm", "Kontraksi kurang apostrof"],
+      "ive": ["I've", "Kontraksi kurang apostrof"],
+      "dont": ["don't", "Kontraksi kurang apostrof"],
+      "cant": ["can't", "Kontraksi kurang apostrof"],
+      "wont": ["won't", "Kontraksi kurang apostrof"],
+      "didnt": ["didn't", "Kontraksi kurang apostrof"],
+      "doesnt": ["doesn't", "Kontraksi kurang apostrof"],
+      "aint": ["ain't", "Kontraksi kurang apostrof"]
+    };
+
+    function detectLangInBrowser(wordArray) {
+      let en = 0, id = 0;
+      wordArray.forEach(w => {
+        const low = (w.word || "").toLowerCase();
+        if (EN_MARKERS.has(low)) en++;
+        if (ID_MARKERS.has(low)) id++;
+      });
+      return en > id ? "en" : "id";
+    }
+
+    function analyzeSuspectsInBrowser(wordArray) {
+      const lang = detectLangInBrowser(wordArray);
+      const prof = (learnedMemory.profiles && learnedMemory.profiles[lang]) ? learnedMemory.profiles[lang] : learnedMemory;
+      const badge = document.getElementById("mlStatusBadge");
+      if (badge) {
+        const vc = Object.keys(prof.custom_vocab || {}).length;
+        const rc = Object.keys(prof.unigram_counts || {}).length + Object.keys(prof.next_context || {}).length;
+        badge.textContent = `🧠 Mini-ML [${lang.toUpperCase()}]: ${rc} Pola & ${vc} Kosakata`;
+      }
+      const vocabLower = new Set(wordArray.map(w => w.word.toLowerCase()));
+      const hasAkong = vocabLower.has("akong");
+      const unigram = prof.unigram_counts || {};
+      const nextCtx = prof.next_context || {};
+      const prevCtx = prof.prev_context || {};
+      const triCtx = prof.trigram_context || {};
+
+      wordArray.forEach((w, i) => {
+        const low = w.word.toLowerCase();
+        const prevW = i > 0 ? wordArray[i - 1] : null;
+        const nextW = i + 1 < wordArray.length ? wordArray[i + 1] : null;
+        const prevLow = prevW ? prevW.word.toLowerCase() : "^";
+        const nextLow = nextW ? nextW.word.toLowerCase() : "$";
+        const duration = w.end - w.start;
+
+        let suspect = false;
+        let reason = "";
+        let suggestion = "";
+
+        // 1. Cek Mini-ML Contextual N-Gram
+        const tk = `${prevLow}|${low}|${nextLow}`;
+        const nk = `${low}|${nextLow}`;
+        const pk = `${prevLow}|${low}`;
+
+        let [cand, prob, total] = predictFromBucket(triCtx[tk]);
+        let label = "Trigram";
+        if (!cand || total === 0) {
+          [cand, prob, total] = predictFromBucket(nextCtx[nk]);
+          label = `Konteks '${w.word} ${nextLow}'`;
+        }
+        if (!cand || total === 0) {
+          [cand, prob, total] = predictFromBucket(prevCtx[pk]);
+          label = `Konteks '${prevLow} ${w.word}'`;
+        }
+
+        if (cand && cand.toLowerCase() !== low && prob >= 0.65) {
+          suspect = true;
+          suggestion = cand;
+          reason = `🧠 Mini-ML (${label}, akurasi ${Math.round(prob * 100)}%)`;
+        }
+
+        // 2. Cek Mini-ML Unigram Memory
+        if (!suspect && unigram[low]) {
+          const [keepCand, keepProb] = predictFromBucket(nextCtx[nk]);
+          if (!(keepCand && keepCand.toLowerCase() === low && keepProb >= 0.6)) {
+            const [uCand, uProb, uTotal] = predictFromBucket(unigram[low]);
+            if (uCand && uCand.toLowerCase() !== low && uProb >= 0.6) {
+              suspect = true;
+              suggestion = uCand;
+              reason = `🧠 Mini-ML Memory (${uTotal}x dipelajari -> '${uCand}')`;
+            }
+          }
+        }
+
+        // 3. Fallback Kamus & Aturan Konteks (Spesifik Bahasa ID vs EN)
+        if (!suspect) {
+          if (lang === "en" && EN_SUSPECT_MAP[low]) {
+            suggestion = EN_SUSPECT_MAP[low][0];
+            reason = EN_SUSPECT_MAP[low][1];
+            suspect = true;
+          } else if (lang === "id" && SLANG_SUSPECT_MAP[low]) {
+            suggestion = SLANG_SUSPECT_MAP[low][0];
+            reason = SLANG_SUSPECT_MAP[low][1];
+            if (low === "manggila" && prevW && ["lo", "lu"].includes(prevLow)) {
+              suggestion = "lebih tua";
+              reason = "Salah dengar frasa 'lebih tua' saat suara tumpang tindih";
+            }
+            suspect = true;
+          } else if (low === "masa" && nextW && nextLow === "aja") {
+            suspect = true;
+            suggestion = "Mas";
+            reason = "Konteks jawaban panggilan: 'Mas aja' terdengar jadi 'Masa aja'";
+          } else if (low === "akang" && hasAkong) {
+            suspect = true;
+            suggestion = (nextW && ["lu", "lo"].includes(nextLow)) ? "Kan" : "Akong";
+            reason = "Salah dengar 'Kan / Akong' jadi 'Akang'";
+          } else if (prevW && prevLow === low && duration <= 0.12) {
+            suspect = true;
+            suggestion = "[HAPUS]";
+            reason = `Kata duplikat sangat pendek (${duration.toFixed(2)}s)`;
+          } else if (w.prob !== undefined && w.prob < 0.68) {
+            suspect = true;
+            reason = `Confidence Whisper rendah (${Math.round(w.prob * 100)}%)`;
+          }
+        }
+
+        w.suspect = suspect;
+        w.reason = reason;
+        w.suggestion = suggestion;
+      });
+    }
+
+    function rebuildChunksAndCues() {
+      analyzeSuspectsInBrowser(words);
+      const chunks = [];
+      let current = [];
+
+      words.forEach((w, idx) => {
+        w._idx = idx;
+        if (!w.word || !w.word.trim()) return;
+        if (current.length === 0) {
+          current.push(w);
+          return;
+        }
+        const prev = current[current.length - 1];
+        const pause = w.start - prev.end;
+        const currentText = current.map(item => item.word).join(" ");
+        const projectedLen = currentText.length + 1 + w.word.length;
+
+        if (
+          current.length >= PRESET_CONFIG.maxWordsPerChunk ||
+          projectedLen > PRESET_CONFIG.maxCharsPerChunk ||
+          pause >= PRESET_CONFIG.pauseThresholdSec ||
+          prev.ends_clause
+        ) {
+          chunks.push(current);
+          current = [w];
+        } else {
+          current.push(w);
+        }
+      });
+      if (current.length > 0) chunks.push(current);
+
+      cues = [];
+      chunks.forEach(chunk => {
+        chunk.forEach((activeWord, idx) => {
+          const startSec = activeWord.start;
+          let endSec = idx < chunk.length - 1 ? chunk[idx + 1].start : activeWord.end;
+          if (endSec <= startSec) endSec = startSec + 0.12;
+
+          const html = chunk
+            .map((w, j) => j === idx ? `<span class="active">${w.word}</span>` : w.word)
+            .join(" ");
+
+          cues.push({
+            start: startSec,
+            end: endSec,
+            html,
+            wordIdx: activeWord._idx,
+            chunkWords: chunk.map(item => item.word),
+            activePos: idx
+          });
+        });
+      });
+
+      countAll.textContent = words.length;
+      countSuspect.textContent = words.filter(w => w.suspect).length;
+      chunkStats.textContent = `${chunks.length} potongan frasa (2-3 kata)`;
+      renderAtTime(videoPlayer.currentTime || 0);
+    }
+
+    function formatClock(sec) {
+      const m = Math.floor(sec / 60).toString().padStart(2, "0");
+      const s = (sec % 60).toFixed(2).padStart(5, "0");
+      return `${m}:${s}`;
+    }
+
+    function formatAssTime(seconds) {
+      if (seconds < 0) seconds = 0;
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      let secs = Math.floor(seconds % 60);
+      let cs = Math.round((seconds - Math.floor(seconds)) * 100);
+      if (cs >= 100) { secs += 1; cs -= 100; }
+      return `${hours}:${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}.${String(cs).padStart(2, "0")}`;
+    }
+
+    function renderWordList() {
+      wordListContainer.innerHTML = "";
+      const freqMap = {};
+      words.forEach(w => {
+        const k = w.word.toLowerCase();
+        freqMap[k] = (freqMap[k] || 0) + 1;
+      });
+
+      words.forEach((w, idx) => {
+        if (filterMode === "suspect" && !w.suspect) return;
+        if (searchQuery && !w.word.toLowerCase().includes(searchQuery.toLowerCase())) return;
+
+        const row = document.createElement("div");
+        row.className = "word-row" + (w.suspect ? " suspect" : "") + (idx === activeWordIndex ? " playing" : "");
+        row.dataset.idx = idx;
+
+        const mainLine = document.createElement("div");
+        mainLine.className = "word-main";
+
+        // Timestamp chip (klik untuk putar di detik kata itu)
+        const timeBtn = document.createElement("span");
+        timeBtn.className = "time-chip";
+        timeBtn.textContent = `▶ ${formatClock(w.start)}`;
+        timeBtn.title = "Klik untuk lompat & dengar kata ini di video";
+        timeBtn.addEventListener("click", () => {
+          videoPlayer.currentTime = Math.max(0, w.start - 0.15);
+          videoPlayer.play();
+        });
+
+        // Input kata
+        const input = document.createElement("input");
+        input.type = "text";
+        input.className = "word-input";
+        input.value = w.word;
+        input.addEventListener("input", (e) => {
+          w.word = e.target.value.trim();
+          rebuildChunksAndCues();
+          row.className = "word-row" + (w.suspect ? " suspect" : "") + (idx === activeWordIndex ? " playing" : "");
+        });
+
+        // Tombol Ganti Semua jika kata muncul > 1 kali
+        const sameCount = freqMap[w.word.toLowerCase()] || 1;
+        let replaceAllBtn = null;
+        if (sameCount > 1) {
+          replaceAllBtn = document.createElement("button");
+          replaceAllBtn.className = "mini-btn";
+          replaceAllBtn.textContent = `Ganti Semua (${sameCount}x)`;
+          replaceAllBtn.title = `Ganti semua kata "${w.word}" di video ini dengan teks di kotak input`;
+          const originalLower = w.word.toLowerCase();
+          replaceAllBtn.addEventListener("click", () => {
+            const newWord = input.value.trim();
+            if (!newWord) return;
+            words.forEach(item => {
+              if (item.word.toLowerCase() === originalLower) item.word = newWord;
+            });
+            rebuildChunksAndCues();
+            renderWordList();
+          });
+        }
+
+        // Toggle batas baris (ends_clause)
+        const clauseBtn = document.createElement("button");
+        clauseBtn.className = "mini-btn" + (w.ends_clause ? " clause-on" : "");
+        clauseBtn.textContent = "↵ Baris";
+        clauseBtn.title = "Paksa potong baris baru setelah kata ini";
+        clauseBtn.addEventListener("click", () => {
+          w.ends_clause = !w.ends_clause;
+          rebuildChunksAndCues();
+          renderWordList();
+        });
+
+        // Hapus kata
+        const delBtn = document.createElement("button");
+        delBtn.className = "mini-btn danger";
+        delBtn.textContent = "🗑️";
+        delBtn.title = "Hapus kata ini";
+        delBtn.addEventListener("click", () => {
+          words.splice(idx, 1);
+          rebuildChunksAndCues();
+          renderWordList();
+        });
+
+        // Input edit detik Start & End
+        const startInput = document.createElement("input");
+        startInput.type = "number";
+        startInput.step = "0.05";
+        startInput.className = "time-input";
+        startInput.title = "Detik mulai (Start)";
+        startInput.value = Number(w.start).toFixed(2);
+        startInput.addEventListener("change", (e) => {
+          w.start = parseFloat(e.target.value) || 0;
+          timeBtn.textContent = `▶ ${formatClock(w.start)}`;
+          rebuildChunksAndCues();
+        });
+
+        const endInput = document.createElement("input");
+        endInput.type = "number";
+        endInput.step = "0.05";
+        endInput.className = "time-input";
+        endInput.title = "Detik selesai (End)";
+        endInput.value = Number(w.end).toFixed(2);
+        endInput.addEventListener("change", (e) => {
+          w.end = parseFloat(e.target.value) || (w.start + 0.2);
+          rebuildChunksAndCues();
+        });
+
+        // Tombol + Sisip Kata Baru setelah kata ini
+        const addBtn = document.createElement("button");
+        addBtn.className = "mini-btn";
+        addBtn.textContent = "➕ Kata";
+        addBtn.title = "Sisipkan kata baru setelah kata ini";
+        addBtn.addEventListener("click", () => {
+          const newStart = Number(w.end.toFixed(2));
+          let newEnd = Number((newStart + 0.22).toFixed(2));
+          if (idx + 1 < words.length) {
+            const nextW = words[idx + 1];
+            if (nextW.start > newStart + 0.08) {
+              newEnd = Number(nextW.start.toFixed(2));
+            } else if (nextW.end > newStart + 0.16) {
+              newEnd = Number(((newStart + nextW.end) / 2).toFixed(2));
+              nextW.start = newEnd;
+            }
+          }
+          words.splice(idx + 1, 0, {
+            word: "kata_baru",
+            start: newStart,
+            end: newEnd,
+            ends_clause: false,
+            suspect: false,
+            reason: "",
+            suggestion: ""
+          });
+          rebuildChunksAndCues();
+          renderWordList();
+        });
+
+        mainLine.appendChild(timeBtn);
+        mainLine.appendChild(startInput);
+        mainLine.appendChild(endInput);
+        mainLine.appendChild(input);
+        if (replaceAllBtn) mainLine.appendChild(replaceAllBtn);
+        mainLine.appendChild(clauseBtn);
+        mainLine.appendChild(addBtn);
+        mainLine.appendChild(delBtn);
+        row.appendChild(mainLine);
+
+        // Banner peringatan jika kata mencurigakan
+        if (w.suspect) {
+          const banner = document.createElement("div");
+          banner.className = "suspect-banner";
+          const reasonSpan = document.createElement("span");
+          reasonSpan.textContent = `⚠️ ${w.reason}`;
+          banner.appendChild(reasonSpan);
+
+          if (w.suggestion) {
+            const fixBtn = document.createElement("button");
+            fixBtn.className = "fix-chip";
+            if (w.suggestion === "[HAPUS]") {
+              fixBtn.textContent = "🗑️ Hapus Duplikat";
+              fixBtn.addEventListener("click", () => {
+                words.splice(idx, 1);
+                rebuildChunksAndCues();
+                renderWordList();
+              });
+            } else {
+              fixBtn.textContent = `✓ Ganti ke "${w.suggestion}"`;
+              fixBtn.addEventListener("click", () => {
+                w.word = w.suggestion;
+                rebuildChunksAndCues();
+                renderWordList();
+              });
+            }
+            banner.appendChild(fixBtn);
+          }
+          row.appendChild(banner);
+        }
+
+        wordListContainer.appendChild(row);
+      });
+    }
+
+    function renderAtTime(t) {
+      const maxDur = words.length ? words[words.length - 1].end : 0;
+      timeDisplay.textContent = `${formatClock(t)} / ${formatClock(maxDur)}`;
+      const cue = cues.find(c => t >= c.start && t < c.end);
+      captionBox.innerHTML = cue ? cue.html : "";
+
+      const newActiveIdx = cue ? cue.wordIdx : -1;
+      if (newActiveIdx !== activeWordIndex) {
+        activeWordIndex = newActiveIdx;
+        const rows = wordListContainer.querySelectorAll(".word-row");
+        rows.forEach(r => {
+          const rIdx = parseInt(r.dataset.idx, 10);
+          r.classList.toggle("playing", rIdx === activeWordIndex);
+        });
+      }
+    }
+
+    // Export ke format .ass lengkap
+    function generateAssString() {
+      const c = PRESET_CONFIG;
+      let out = `[Script Info]
+Title: GoldPulse Storytelling Caption Preset
+ScriptType: v4.00+
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+YCbCr Matrix: TV.709
+PlayResX: ${c.playResX}
+PlayResY: ${c.playResY}
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: GoldPulse,${c.fontName},${c.fontSize},&H00FFFFFF,&H002EB8F5,${c.outlineColor},${c.shadowColor},-1,0,0,0,100,100,-1,0,1,${c.outlineWidth},${c.shadowDepth},2,60,60,${c.marginV},1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+`;
+      cues.forEach(cue => {
+        const startStr = formatAssTime(cue.start);
+        const endStr = formatAssTime(cue.end);
+        const lineText = cue.chunkWords
+          .map((w, j) => j === cue.activePos ? `{\\1c${c.activeColor}}${w}{\\1c${c.inactiveColor}}` : w)
+          .join(" ");
+        out += `Dialogue: 0,${startStr},${endStr},GoldPulse,,0,0,0,,${lineText}\n`;
+      });
+      return out;
+    }
+
+    function downloadFile(filename, content, mime) {
+      const blob = new Blob([content], { type: mime });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      a.click();
+    }
+
+    // Event Listeners
+    tabAll.addEventListener("click", () => {
+      filterMode = "all";
+      tabAll.classList.add("active");
+      tabSuspect.classList.remove("active");
+      renderWordList();
+    });
+
+    tabSuspect.addEventListener("click", () => {
+      filterMode = "suspect";
+      tabSuspect.classList.add("active");
+      tabAll.classList.remove("active");
+      renderWordList();
+    });
+
+    searchWordInput.addEventListener("input", (e) => {
+      searchQuery = e.target.value;
+      renderWordList();
+    });
+
+    document.getElementById("autoFixAllBtn").addEventListener("click", () => {
+      const toRemove = new Set();
+      words.forEach((w, idx) => {
+        if (w.suspect && w.suggestion) {
+          if (w.suggestion === "[HAPUS]") {
+            toRemove.add(idx);
+          } else {
+            w.word = w.suggestion;
+          }
+        }
+      });
+      words = words.filter((_, idx) => !toRemove.has(idx));
+      rebuildChunksAndCues();
+      renderWordList();
+    });
+
+    document.getElementById("downloadAssBtn").addEventListener("click", () => {
+      downloadFile("goldpulse_revised.ass", generateAssString(), "text/plain;charset=utf-8");
+    });
+
+    document.getElementById("downloadJsonBtn").addEventListener("click", () => {
+      downloadFile("words_revised.json", JSON.stringify(words, null, 2), "application/json;charset=utf-8");
+    });
+
+    document.getElementById("replayChunkBtn").addEventListener("click", () => {
+      videoPlayer.currentTime = Math.max(0, videoPlayer.currentTime - 2.0);
+      videoPlayer.play();
+    });
+
+    document.getElementById("videoInput").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      videoPlayer.src = URL.createObjectURL(file);
+      videoPlayer.play();
+    });
+
+    document.getElementById("jsonInput").addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const parsed = JSON.parse(await file.text());
+      if (Array.isArray(parsed)) {
+        words = parsed;
+        rebuildChunksAndCues();
+        renderWordList();
+      }
+    });
+
+    function syncLoop() {
+      if (!videoPlayer.paused && !videoPlayer.ended) {
+        renderAtTime(videoPlayer.currentTime);
+      }
+      requestAnimationFrame(syncLoop);
+    }
+    videoPlayer.addEventListener("seeked", () => renderAtTime(videoPlayer.currentTime));
+
+    // Inisialisasi dari defaultWordsData
+    try {
+      words = JSON.parse(document.getElementById("defaultWordsData").textContent.trim());
+    } catch (e) {
+      words = [];
+    }
+    rebuildChunksAndCues();
+    renderWordList();
+    requestAnimationFrame(syncLoop);
+  </script>
+</body>
+</html>
