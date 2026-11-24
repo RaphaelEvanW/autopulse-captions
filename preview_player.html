@@ -78,15 +78,17 @@
     }
     .phone-frame {
       position: relative;
-      width: 360px;
-      height: 640px;
+      width: min(360px, 88vw);
+      aspect-ratio: 9 / 16;
       background: radial-gradient(circle at 50% 35%, #2b2118 0%, #090a0c 75%);
       border-radius: 20px;
       overflow: hidden;
       box-shadow: 0 20px 50px rgba(0,0,0,0.75);
       border: 2px solid #27272a;
     }
-    video {
+    .phone-frame video {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -99,25 +101,67 @@
       width: 92%;
       text-align: center;
       pointer-events: none;
-      font-family: 'Montserrat', Arial, sans-serif;
-      font-weight: 800;
+      font-family: Nunito, Arial, sans-serif;
+      font-weight: 700;
       font-size: 22px;
-      letter-spacing: -0.4px;
+      letter-spacing: -0.3px;
       line-height: 1.15;
-      color: #FFFFFF;
-      -webkit-text-stroke: 1.25px #000000;
+      color: #FFF9EF;
       paint-order: stroke fill;
-      text-shadow:
-        0 2px 4px rgba(0, 0, 0, 0.95),
-        0 0 9px rgba(0, 0, 0, 0.85),
-        1.8px 1.8px 0 #000,
-        -1.8px -1.8px 0 #000,
-        1.8px -1.8px 0 #000,
-        -1.8px 1.8px 0 #000;
       white-space: nowrap;
     }
+    @font-face {
+      font-family: Nunito;
+      src: url("fonts/Nunito-Bold.ttf") format("truetype");
+      font-weight: 700;
+    }
+    @font-face {
+      font-family: Montserrat;
+      src: url("fonts/Montserrat-Bold.ttf") format("truetype");
+      font-weight: 700;
+    }
     .caption-overlay .active {
-      color: #F5B82E;
+      display: inline-block;
+      color: #F7D26B;
+      transform-origin: center bottom;
+    }
+    .shorts-guide {
+      position: absolute;
+      right: 0;
+      bottom: 14%;
+      width: 18%;
+      height: 47%;
+      border: 1px dashed #f5b82e;
+      border-radius: 8px 0 0 8px;
+      background: rgba(245, 184, 46, 0.16);
+      pointer-events: none;
+    }
+    .shorts-guide span {
+      display: block;
+      padding: 6px 3px;
+      color: #f8df99;
+      background: #211807;
+      font-size: 0.67rem;
+      text-align: center;
+    }
+    .preview-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 10px;
+      max-width: 360px;
+      margin-top: 10px;
+      color: #b9c2d3;
+      font-size: 0.78rem;
+    }
+    .preview-controls label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .preview-controls input[type="range"] {
+      width: 94px;
+      accent-color: #f5b82e;
     }
     .timeline-bar {
       margin-top: 10px;
@@ -345,10 +389,17 @@
       <div class="phone-frame">
         <video id="videoPlayer" src="test_video.mp4" playsinline controls></video>
         <div class="caption-overlay" id="captionBox"></div>
+        <div class="shorts-guide" id="shortsGuide" hidden><span>Tombol Shorts</span></div>
       </div>
       <div class="timeline-bar">
         <span id="timeDisplay">00:00.00 / 00:53.52</span>
         <button class="mini-btn" id="replayChunkBtn">&#8634; Ulang 2 Detik</button>
+      </div>
+      <div class="preview-controls">
+        <label><input type="checkbox" id="shortsGuideToggle"> Panduan tombol Shorts</label>
+        <label>Posisi potongan <input type="range" id="captionPosition" min="16" max="90" step="1" disabled></label>
+        <button class="mini-btn" id="resetCaptionPosition" disabled>Reset posisi</button>
+        <button class="mini-btn" id="mergeNextCaption" disabled>Gabung potongan berikutnya</button>
       </div>
     </div>
 
@@ -371,7 +422,7 @@
       <div class="word-list" id="wordListContainer"></div>
 
       <div class="editor-footer">
-        <span>Tips: Tombol <b>&crarr; Baris</b> memaksa potong baris baru setelah kata tersebut.</span>
+        <span><b>Batas</b> mengatur potongan setelah kata. <b>Aksen</b> memperkuat pop kata itu.</span>
         <span id="chunkStats">0 potongan frasa</span>
       </div>
     </div>
@@ -3550,23 +3601,23 @@
 }
   </script>
 
+  <script id="captionConfig" type="application/json">{"play_res_x": 1080, "play_res_y": 1920, "font_name": "Nunito", "font_size": 72, "active_color": "&H6BD2F7&", "inactive_color": "&H00EFF9FF", "outline_color": "&H0025222A", "shadow_color": "&HB8221B21", "outline_width": 2.645, "shadow_depth": 1.6, "margin_v": 460, "max_words_per_chunk": 4, "max_chars_per_chunk": 26, "pause_threshold_sec": 0.35, "pop_scale": 107, "pop_lift": 5, "pop_ms": 120, "active_shadow": 3, "pop_full_ms": 180, "emphasis_scale": 113, "emphasis_lift": 8, "emphasis_ms": 160, "phrase_starters": ["about", "after", "at", "because", "before", "but", "by", "dari", "dengan", "di", "for", "from", "if", "in", "kalau", "karena", "ke", "ketika", "lalu", "oleh", "on", "pada", "sampai", "sebelum", "setelah", "tanpa", "tapi", "tentang", "tetapi", "then", "to", "untuk", "when", "with", "without"], "keep_with_next": ["a", "about", "after", "akan", "am", "an", "are", "at", "baru", "because", "before", "belum", "bisa", "but", "by", "can", "could", "cukup", "dari", "dengan", "di", "enggak", "for", "from", "ga", "gak", "had", "harus", "has", "have", "her", "his", "if", "in", "is", "jangan", "kalau", "karena", "ke", "ketika", "lagi", "lalu", "lebih", "masih", "mau", "more", "most", "my", "nggak", "not", "oleh", "on", "our", "pada", "paling", "para", "pernah", "sampai", "sang", "sangat", "sebelum", "sedang", "setelah", "setiap", "should", "si", "sudah", "tak", "tanpa", "tapi", "telah", "tentang", "tetapi", "that", "the", "their", "then", "these", "this", "those", "tidak", "to", "untuk", "very", "was", "were", "when", "will", "with", "without", "would", "yang", "your"], "object_verbs": ["ambil", "ate", "baca", "bawa", "beli", "beri", "bought", "bring", "brought", "buka", "buy", "buying", "cari", "drank", "drink", "drinking", "eat", "eating", "find", "found", "gave", "get", "give", "giving", "got", "jual", "kasih", "lihat", "love", "loved", "made", "makan", "make", "making", "memakai", "memesan", "memilih", "memotong", "memukul", "menaruh", "menerima", "menolak", "menonton", "menulis", "menutup", "minum", "need", "needed", "pakai", "play", "played", "playing", "read", "reading", "saw", "see", "take", "taking", "taruh", "tell", "telling", "told", "took", "tulis", "tutup", "want", "wanted", "write", "writing", "wrote"], "object_verb_prefix": "^(?:mem[bpfv]|men[cdjt]|meng[ghkqaeiou]|meny[a-z]|mer[a-z]|mel[a-z]|mew[a-z])[a-z]{2,}$"}</script>
   <script>
-    const PRESET_CONFIG = {
-      playResX: 1080,
-      playResY: 1920,
-      fontName: "Montserrat",
-      fontSize: 63,
-      inactiveColor: "&HFFFFFF&",
-      activeColor: "&H2EB8F5&",
-      outlineColor: "&H00000000",
-      shadowColor: "&H96000000",
-      outlineWidth: 3.6,
-      shadowDepth: 3.2,
-      marginV: 460,
-      maxWordsPerChunk: 3,
-      maxCharsPerChunk: 22,
-      pauseThresholdSec: 0.35
-    };
+    const c = JSON.parse(document.getElementById("captionConfig").textContent);
+    function cssAssColor(ass) {
+      const hex = ass.slice(2).replace(/&$/, "");
+      const bgr = hex.slice(-6);
+      const alpha = hex.length === 8 ? 255 - parseInt(hex.slice(0, 2), 16) : 255;
+      return "#" + bgr.slice(4) + bgr.slice(2, 4) + bgr.slice(0, 2) + alpha.toString(16).padStart(2, "0");
+    }
+    const captionInk = cssAssColor(c.inactive_color);
+    const activeInk = cssAssColor(c.active_color);
+    const outlineInk = cssAssColor(c.outline_color);
+    const shadowInk = cssAssColor(c.shadow_color);
+    const phraseStarters = new Set(c.phrase_starters);
+    const keepWithNext = new Set(c.keep_with_next);
+    const objectVerbs = new Set(c.object_verbs);
+    const objectVerbPrefix = new RegExp(c.object_verb_prefix);
 
     const SLANG_SUSPECT_MAP = {
       "mangg": ["manggil", "Kata terpotong di akhir"],
@@ -3593,7 +3644,11 @@
     let activeWordIndex = -1;
 
     const videoPlayer = document.getElementById("videoPlayer");
+    videoPlayer.parentElement.style.aspectRatio = c.play_res_x + " / " + c.play_res_y;
     const captionBox = document.getElementById("captionBox");
+    const positionSlider = document.getElementById("captionPosition");
+    const resetPosition = document.getElementById("resetCaptionPosition");
+    const mergeNextCaption = document.getElementById("mergeNextCaption");
     const timeDisplay = document.getElementById("timeDisplay");
     const wordListContainer = document.getElementById("wordListContainer");
     const countAll = document.getElementById("countAll");
@@ -3771,54 +3826,121 @@
       });
     }
 
+    function captionPosition(word) {
+      const y = word.caption_y;
+      return typeof y === "number" && y >= 16 && y <= 90 ? y : null;
+    }
+
+    function captionWordWidths(tokens) {
+      return tokens.map(word => {
+        const width = Array.from(word.word).reduce((sum, char) => {
+          if (" ilIjtfr'.,:!|".includes(char)) return sum + 0.30;
+          if ("mwMW@".includes(char)) return sum + 0.94;
+          return sum + (/\p{Lu}/u.test(char) ? 0.72 : 0.58);
+        }, 0);
+        const scale = word.caption_emphasis === true ? c.emphasis_scale : c.pop_scale;
+        return [width, width * (scale / 100 - 1)];
+      });
+    }
+
+    function groupWordsIntoChunks(tokens) {
+      const size = tokens.length;
+      const costs = Array(size + 1).fill(Infinity);
+      costs[size] = 0;
+      const nextCut = Array(size).fill(size);
+      const widths = captionWordWidths(tokens);
+      const joinedEnd = tokens.map((_, index) => index);
+      for (let i = size - 2; i >= 0; i--) {
+        if (tokens[i].caption_break === "join") joinedEnd[i] = joinedEnd[i + 1];
+      }
+      const lineWidth = (c.play_res_x - 120) / c.font_size;
+
+      for (let start = size - 1; start >= 0; start--) {
+        let chars = 0;
+        let em = 0;
+        let popWidth = 0;
+        for (let end = start; end < Math.min(size, Math.max(joinedEnd[start] + 1, start + c.max_words_per_chunk)); end++) {
+          chars += Array.from(tokens[end].word).length + Number(end > start);
+          em += widths[end][0] + (end > start ? 0.30 : 0);
+          popWidth = Math.max(popWidth, widths[end][1]);
+          if (end > joinedEnd[start] && (chars > c.max_chars_per_chunk || em + popWidth > lineWidth)) break;
+          if (end < joinedEnd[end]) continue;
+          const next = tokens[end + 1];
+          const pause = next ? Math.round((next.start - tokens[end].end) * 1e6) / 1e6 : 0;
+          const hardBreak = !next || tokens[end].caption_break === "split" || tokens[end].ends_clause ||
+            pause >= c.pause_threshold_sec || captionPosition(tokens[end]) !== captionPosition(next);
+          let cost = costs[end + 1] + 6 + (start === end ? 8 : 0);
+          if (!hardBreak) {
+            const prev = tokens[end].word.toLowerCase();
+            const following = next.word.toLowerCase();
+            if (keepWithNext.has(prev)) {
+              cost += 20;
+            } else if (!phraseStarters.has(following) && (objectVerbs.has(prev) || objectVerbPrefix.test(prev))) {
+              cost += 24;
+            }
+            cost -= 2 * (Number(phraseStarters.has(following)) + Number(pause >= 0.16));
+          }
+          if (cost <= costs[start]) {
+            costs[start] = cost;
+            nextCut[start] = end + 1;
+          }
+          if (hardBreak) break;
+        }
+      }
+
+      const chunks = [];
+      for (let start = 0; start < size; start = nextCut[start]) {
+        chunks.push(tokens.slice(start, nextCut[start]));
+      }
+      return chunks;
+    }
+
+    let displayedCue = null;
+    let activeCaptionWord = null;
+    let captionChunks = [];
+
+    function captionMotion(durationMs, emphasized) {
+      const strength = Math.max(0.35, Math.min(1, durationMs / c.pop_full_ms));
+      const scale = emphasized ? c.emphasis_scale : c.pop_scale;
+      const lift = emphasized ? c.emphasis_lift : c.pop_lift;
+      const settleMs = emphasized ? c.emphasis_ms : c.pop_ms;
+      return {
+        popScale: Math.round(100 + (scale - 100) * strength),
+        popLift: Math.round(lift * strength),
+        shadow: c.active_shadow + (emphasized ? 2 : 0),
+        popMs: Math.max(1, Math.min(durationMs, settleMs))
+      };
+    }
+
     function rebuildChunksAndCues() {
       analyzeSuspectsInBrowser(words);
-      const chunks = [];
-      let current = [];
-
-      words.forEach((w, idx) => {
-        w._idx = idx;
-        if (!w.word || !w.word.trim()) return;
-        if (current.length === 0) {
-          current.push(w);
-          return;
-        }
-        const prev = current[current.length - 1];
-        const pause = w.start - prev.end;
-        const currentText = current.map(item => item.word).join(" ");
-        const projectedLen = currentText.length + 1 + w.word.length;
-
-        if (
-          current.length >= PRESET_CONFIG.maxWordsPerChunk ||
-          projectedLen > PRESET_CONFIG.maxCharsPerChunk ||
-          pause >= PRESET_CONFIG.pauseThresholdSec ||
-          prev.ends_clause
-        ) {
-          chunks.push(current);
-          current = [w];
-        } else {
-          current.push(w);
-        }
-      });
-      if (current.length > 0) chunks.push(current);
+      words.forEach((word, index) => { word._idx = index; });
+      captionChunks = groupWordsIntoChunks(words.filter(w => w.word && w.word.trim()));
 
       cues = [];
-      chunks.forEach(chunk => {
+      captionChunks.forEach((chunk, chunkIndex) => {
+        const position = captionPosition(chunk[0]);
+        const y = position === null ? c.play_res_y - c.margin_v : Math.round(c.play_res_y * position / 100);
+        const widths = captionWordWidths(chunk);
+        const em = widths.reduce((sum, [width]) => sum + width, 0) + 0.30 * (chunk.length - 1) +
+          Math.max(...widths.map(([, extra]) => extra));
+        const fontSize = Math.max(1, Math.min(c.font_size, Math.floor((c.play_res_x - 120) / Math.max(0.01, em))));
+        const chunkWords = chunk.map(item => item.word);
         chunk.forEach((activeWord, idx) => {
           const startSec = activeWord.start;
           let endSec = idx < chunk.length - 1 ? chunk[idx + 1].start : activeWord.end;
           if (endSec <= startSec) endSec = startSec + 0.12;
 
-          const html = chunk
-            .map((w, j) => j === idx ? `<span class="active">${w.word}</span>` : w.word)
-            .join(" ");
-
           cues.push({
             start: startSec,
             end: endSec,
-            html,
+            ...captionMotion(Math.round((endSec - startSec) * 1000), activeWord.caption_emphasis === true),
+            y,
+            position,
+            fontSize,
+            chunkIndex,
             wordIdx: activeWord._idx,
-            chunkWords: chunk.map(item => item.word),
+            chunkWords,
             activePos: idx
           });
         });
@@ -3826,7 +3948,7 @@
 
       countAll.textContent = words.length;
       countSuspect.textContent = words.filter(w => w.suspect).length;
-      chunkStats.textContent = `${chunks.length} potongan frasa (2-3 kata)`;
+      chunkStats.textContent = `${captionChunks.length} potongan frasa`;
       renderAtTime(videoPlayer.currentTime || 0);
     }
 
@@ -3906,15 +4028,31 @@
           });
         }
 
-        // Toggle batas baris (ends_clause)
-        const clauseBtn = document.createElement("button");
-        clauseBtn.className = "mini-btn" + (w.ends_clause ? " clause-on" : "");
-        clauseBtn.textContent = "↵ Baris";
-        clauseBtn.title = "Paksa potong baris baru setelah kata ini";
-        clauseBtn.addEventListener("click", () => {
-          w.ends_clause = !w.ends_clause;
+        const boundary = document.createElement("select");
+        boundary.className = "mini-btn";
+        boundary.setAttribute("aria-label", "Batas setelah " + w.word);
+        boundary.append(new Option("Batas: Auto", ""), new Option("Pisah", "split"), new Option("Sambung", "join"));
+        boundary.value = w.caption_break || "";
+        boundary.disabled = idx === words.length - 1;
+        boundary.addEventListener("change", () => {
+          w.caption_break = boundary.value || null;
           rebuildChunksAndCues();
-          renderWordList();
+        });
+
+        const emphasis = document.createElement("button");
+        emphasis.className = "mini-btn";
+        emphasis.textContent = "Aksen";
+        emphasis.title = "Perkuat pop untuk kata ini";
+        const updateEmphasis = () => {
+          const enabled = w.caption_emphasis === true;
+          emphasis.classList.toggle("clause-on", enabled);
+          emphasis.setAttribute("aria-pressed", String(enabled));
+        };
+        updateEmphasis();
+        emphasis.addEventListener("click", () => {
+          w.caption_emphasis = w.caption_emphasis !== true;
+          updateEmphasis();
+          rebuildChunksAndCues();
         });
 
         // Hapus kata
@@ -3974,6 +4112,8 @@
             start: newStart,
             end: newEnd,
             ends_clause: false,
+            caption_break: w.caption_break === "join" ? "join" : null,
+            caption_y: captionPosition(w),
             suspect: false,
             reason: "",
             suggestion: ""
@@ -3987,7 +4127,7 @@
         mainLine.appendChild(endInput);
         mainLine.appendChild(input);
         if (replaceAllBtn) mainLine.appendChild(replaceAllBtn);
-        mainLine.appendChild(clauseBtn);
+        mainLine.append(boundary, emphasis);
         mainLine.appendChild(addBtn);
         mainLine.appendChild(delBtn);
         row.appendChild(mainLine);
@@ -4031,7 +4171,45 @@
       const maxDur = words.length ? words[words.length - 1].end : 0;
       timeDisplay.textContent = `${formatClock(t)} / ${formatClock(maxDur)}`;
       const cue = cues.find(c => t >= c.start && t < c.end);
-      captionBox.innerHTML = cue ? cue.html : "";
+      const scale = captionBox.parentElement.clientWidth / c.play_res_x;
+      captionBox.style.fontFamily = c.font_name + ", Arial, sans-serif";
+      captionBox.style.fontSize = ((cue?.fontSize ?? c.font_size) * scale) + "px";
+      captionBox.style.color = captionInk;
+      captionBox.style.webkitTextStroke = (2 * c.outline_width * scale) + "px " + outlineInk;
+      captionBox.style.textShadow = "0 " + (c.shadow_depth * scale) + "px " + (2 * scale) + "px " + shadowInk;
+      captionBox.style.bottom = (cue ? 100 - 100 * cue.y / c.play_res_y : 100 * c.margin_v / c.play_res_y) + "%";
+      positionSlider.disabled = !cue;
+      resetPosition.disabled = !cue || cue.position === null;
+      mergeNextCaption.disabled = !cue || cue.chunkIndex >= captionChunks.length - 1;
+      if (cue && positionSlider !== document.activeElement) {
+        positionSlider.value = Math.round(100 * cue.y / c.play_res_y);
+      }
+      if (cue !== displayedCue) {
+        displayedCue = cue;
+        activeCaptionWord = null;
+        captionBox.replaceChildren();
+        if (cue) {
+          cue.chunkWords.forEach((word, index) => {
+            if (index) captionBox.append(" ");
+            if (index === cue.activePos) {
+              activeCaptionWord = document.createElement("span");
+              activeCaptionWord.className = "active";
+              activeCaptionWord.textContent = word;
+              activeCaptionWord.style.color = activeInk;
+              captionBox.append(activeCaptionWord);
+            } else {
+              captionBox.append(word);
+            }
+          });
+        }
+      }
+      if (activeCaptionWord) {
+        const gain = 1 - Math.min(1, (t - cue.start) * 1000 / cue.popMs);
+        const pop = 1 + (cue.popScale / 100 - 1) * gain;
+        const lift = cue.popLift * scale * gain;
+        activeCaptionWord.style.transform = "translateY(" + (-lift) + "px) scale(" + pop + ")";
+        activeCaptionWord.style.textShadow = "0 " + (cue.shadow * scale) + "px " + (3 * scale) + "px " + shadowInk;
+      }
 
       const newActiveIdx = cue ? cue.wordIdx : -1;
       if (newActiveIdx !== activeWordIndex) {
@@ -4046,19 +4224,18 @@
 
     // Export ke format .ass lengkap
     function generateAssString() {
-      const c = PRESET_CONFIG;
       let out = `[Script Info]
 Title: GoldPulse Storytelling Caption Preset
 ScriptType: v4.00+
 WrapStyle: 2
 ScaledBorderAndShadow: yes
 YCbCr Matrix: TV.709
-PlayResX: ${c.playResX}
-PlayResY: ${c.playResY}
+PlayResX: ${c.play_res_x}
+PlayResY: ${c.play_res_y}
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: GoldPulse,${c.fontName},${c.fontSize},&H00FFFFFF,&H002EB8F5,${c.outlineColor},${c.shadowColor},-1,0,0,0,100,100,-1,0,1,${c.outlineWidth},${c.shadowDepth},2,60,60,${c.marginV},1
+Style: GoldPulse,${c.font_name},${c.font_size},${c.inactive_color},&H00${c.active_color.slice(2, -1)},${c.outline_color},${c.shadow_color},-1,0,0,0,100,100,-1,0,1,${c.outline_width},${c.shadow_depth},2,60,60,${c.margin_v},1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -4066,10 +4243,27 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
       cues.forEach(cue => {
         const startStr = formatAssTime(cue.start);
         const endStr = formatAssTime(cue.end);
-        const lineText = cue.chunkWords
-          .map((w, j) => j === cue.activePos ? `{\\1c${c.activeColor}}${w}{\\1c${c.inactiveColor}}` : w)
-          .join(" ");
-        out += `Dialogue: 0,${startStr},${endStr},GoldPulse,,0,0,0,,${lineText}\n`;
+        const x = c.play_res_x / 2;
+        const y = cue.y;
+        const base = [];
+        const overlay = [];
+        const shadowAlpha = c.shadow_color.slice(2, 4);
+        cue.chunkWords.forEach((word, index) => {
+          const token = word.replaceAll("{", "｛").replaceAll("}", "｝").replaceAll("\\", "＼");
+          if (index === cue.activePos) {
+            base.push("{\\alpha&HFF&}" + token + "{\\alpha&H00&\\4a&H" + shadowAlpha + "&}");
+            overlay.push("{\\alpha&H00&\\4a&H" + shadowAlpha + "&\\1c" + c.active_color + "\\shad" + cue.shadow +
+              "\\fscx" + cue.popScale + "\\fscy" + cue.popScale +
+              "\\t(0," + cue.popMs + ",\\fscx100\\fscy100)}" + token + "{\\fscx100\\fscy100}");
+          } else {
+            base.push(token);
+            overlay.push("{\\alpha&HFF&\\fscx100\\fscy100}" + token);
+          }
+        });
+        const timing = "," + startStr + "," + endStr + ",GoldPulse,,0,0,0,,";
+        out += "Dialogue: 0" + timing + "{\\pos(" + x + "," + y + ")\\fs" + cue.fontSize + "}" + base.join(" ") + "\n";
+        out += "Dialogue: 1" + timing + "{\\move(" + x + "," + (y - cue.popLift) + "," + x + "," + y +
+          ",0," + cue.popMs + ")\\fs" + cue.fontSize + "}" + overlay.join(" ") + "\n";
       });
       return out;
     }
@@ -4123,7 +4317,41 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     });
 
     document.getElementById("downloadJsonBtn").addEventListener("click", () => {
-      downloadFile("words_revised.json", JSON.stringify(words, null, 2), "application/json;charset=utf-8");
+      const revised = words.map(({ _idx, ...word }) => word);
+      downloadFile("words_revised.json", JSON.stringify(revised, null, 2), "application/json;charset=utf-8");
+    });
+
+    document.getElementById("shortsGuideToggle").addEventListener("change", event => {
+      document.getElementById("shortsGuide").hidden = !event.target.checked;
+    });
+
+    function setCaptionPosition(position) {
+      if (!displayedCue) return;
+      videoPlayer.pause();
+      captionChunks[displayedCue.chunkIndex].forEach(word => { word.caption_y = position; });
+      rebuildChunksAndCues();
+    }
+
+    positionSlider.addEventListener("pointerdown", () => videoPlayer.pause());
+    positionSlider.addEventListener("input", () => setCaptionPosition(Number(positionSlider.value)));
+    resetPosition.addEventListener("click", () => setCaptionPosition(null));
+
+    mergeNextCaption.addEventListener("click", () => {
+      if (!displayedCue) return;
+      const index = displayedCue.chunkIndex;
+      const next = captionChunks[index + 1];
+      if (!next) return;
+      videoPlayer.pause();
+      const previous = captionChunks[index - 1];
+      if (previous) previous[previous.length - 1].caption_break = "split";
+      const combined = [...captionChunks[index], ...next];
+      const position = displayedCue.position;
+      combined.forEach((word, i) => {
+        word.caption_break = i < combined.length - 1 ? "join" : "split";
+        word.caption_y = position;
+      });
+      rebuildChunksAndCues();
+      renderWordList();
     });
 
     document.getElementById("replayChunkBtn").addEventListener("click", () => {
@@ -4156,6 +4384,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
       requestAnimationFrame(syncLoop);
     }
     videoPlayer.addEventListener("seeked", () => renderAtTime(videoPlayer.currentTime));
+    window.addEventListener("resize", () => renderAtTime(videoPlayer.currentTime));
 
     // Inisialisasi dari defaultWordsData
     try {

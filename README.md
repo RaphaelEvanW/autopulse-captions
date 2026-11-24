@@ -1,14 +1,14 @@
 # ✨ AutoPulse Captions — AI Micro-Chunk Auto-Captioner + Mini-ML (EN & ID)
 
-Automated video captioning engine & **Antigravity Agent Skill** (`autopulse-captions`) that generates **Single-Line Micro-Chunk (`2–3 words`)** subtitles with **Active Word Highlight** (default `GoldPulse` preset `#FFFFFF` ➔ `#F5B82E`, or any custom `--highlight #RRGGBB` color & style), powered by `faster-whisper`, a self-learning **Contextual N-Gram & Phonetic Mini-ML** corrector, an interactive browser Word Inspector, and **FFmpeg** burn-in.
+Automated video captioning engine & **Antigravity Agent Skill** (`autopulse-captions`) that generates **Single-Line Micro-Chunk (up to 4 words)** subtitles with **Active Word Highlight** (default `GoldPulse` preset `#FFF9EF` ➔ `#F7D26B`, or any custom `--highlight #RRGGBB` color & style), powered by `faster-whisper`, a self-learning **Contextual N-Gram & Phonetic Mini-ML** corrector, an interactive browser Word Inspector, and **FFmpeg** burn-in.
 
 ---
 
 ## 🔥 Key Features
 
 1. **GoldPulse Visual Style (`.ass` + FFmpeg Burn-in)**
-   - **Single-Line Micro-Chunking:** Groups speech into `2–3` words per line (`max_chars: 22` on 9:16 vertical video) with natural clause & pause detection (`> 0.35s`).
-   - **Active Word Highlight:** Words stay crisp white (`#FFFFFF`) and light up in Warm Gold (`#F5B82E`) the exact millisecond they are spoken, with zero flicker between words.
+   - **Single-Line Micro-Chunking:** Chooses short phrases using nearby words, punctuation, pauses and estimated text width. Portrait captions allow up to 4 words and 26 characters per line.
+   - **Active Word Highlight:** GoldPulse uses rounded Nunito Bold, a thin outline, a soft shadow, and a brief warm-gold pop on the active word. The active word scales up by 7%, lifts 5 ASS pixels, and settles over up to 120 ms.
    - **Auto-Orientation:** Automatically detects **Portrait (`9:16`)**, **Landscape (`16:9`)**, or **Square (`1:1`)** via `ffprobe` and scales font size & vertical margins accordingly.
 
 2. **Smart Hardware Auto-Detection (`gpu_check.py`)**
@@ -28,6 +28,8 @@ Automated video captioning engine & **Antigravity Agent Skill** (`autopulse-capt
 4. **Self-Learning Mini-ML (`learned_memory.json`) & Browser Word Inspector (`preview_player.html`)**
    - Flags low-confidence Whisper words, phonetic slang mishearings, contractions, and stutters.
    - Edit words, adjust start/end timestamps (`0.05s` step), or insert missed words (`➕ Kata`) directly in `preview_player.html`.
+   - Set **Batas** to split or keep adjacent words together, or merge the current and next captions in the preview. **Aksen** adds a stronger pop to a selected word. Fast words use smaller pop motion automatically.
+   - Toggle **Panduan tombol Shorts** for an approximate preview of the right-side button area. **Posisi potongan** moves only the selected caption vertically. Boundary, position, and emphasis edits are preserved in revised JSON and ASS output.
    - Every time you re-burn from your revised `words_revised.json`, `train_mini_ml()` compares Whisper's raw output with your edits and updates `learned_memory.json` (Unigram, Bigram/Trigram context, Phonetic Skeleton, and Whisper `hotwords` injection).
 
 ---
@@ -121,7 +123,7 @@ autopulse-captions/
 ├── preview_player.html       # Interactive Live Preview & Word Inspector Web UI
 ├── learned_memory.json       # Self-learning Mini-ML database (EN & ID profiles)
 ├── glossary.example.json     # Example static glossary override
-├── fonts/                    # Bundled Montserrat Bold & ExtraBold fonts
+├── fonts/                    # Bundled Nunito Bold and Montserrat fonts
 ├── references/               # Detailed CLI & Mini-ML reference docs for the agent
 │   ├── cli.md
 │   └── mini-ml.md

@@ -3,7 +3,7 @@
 Auto-Caption Generator - GoldPulse Style (Micro-Chunk Active Word Highlight)
 ----------------------------------------------------------------------------
 Mengubah video/audio menjadi subtitle .ass dengan:
-- Pemenggalan pendek 2-3 kata per baris (1 baris saja / Single-Line Micro-Chunk)
+- Pemenggalan frasa pendek dalam satu baris
 - Pembersihan tanda baca otomatis dengan deteksi jeda klausa
 - Efek Active Word Highlight (Putih #FFFFFF -> Kuning Emas #F5B82E per kata)
 - Opsi burn-in langsung ke video via FFmpeg
@@ -59,18 +59,26 @@ def register_nvidia_dlls() -> None:
 PRESET_CONFIG = {
     "play_res_x": 1080,
     "play_res_y": 1920,
-    "font_name": "Montserrat",       # Bisa diganti Rubik, Proxima Nova, atau Arial
-    "font_size": 63,                 # Dikecilkan (~3px pada skala preview / -9pt pada skala 1080p)
-    "inactive_color": "&HFFFFFF&",   # Putih (#FFFFFF)
-    "active_color": "&H2EB8F5&",     # Kuning Emas (#F5B82E -> BGR: 2E B8 F5)
-    "outline_color": "&H00000000",   # Hitam solid
-    "shadow_color": "&H96000000",    # Hitam semi-transparan untuk drop shadow
-    "outline_width": 3.6,
-    "shadow_depth": 3.2,
+    "font_name": "Nunito",
+    "font_size": 72,
+    "active_color": "&H6BD2F7&",     # #F7D26B
+    "inactive_color": "&H00EFF9FF",  # #FFF9EF
+    "outline_color": "&H0025222A",   # #2A2225
+    "shadow_color": "&HB8221B21",    # #211B22, 28% opacity
+    "outline_width": 2.645,
+    "shadow_depth": 1.6,
     "margin_v": 460,                 # Dikebawahkan (~24% dari bawah layar)
-    "max_words_per_chunk": 3,        # Maksimal 2-3 kata per layar
-    "max_chars_per_chunk": 22,       # Jaga agar tetap 1 baris pendek (muat 'scared to disappoint')
+    "max_words_per_chunk": 4,
+    "max_chars_per_chunk": 26,
     "pause_threshold_sec": 0.35,     # Pisah baris baru jika ada jeda bicara > 0.35 detik
+    "pop_scale": 107,
+    "pop_lift": 5,
+    "pop_ms": 120,
+    "active_shadow": 3,
+    "pop_full_ms": 180,
+    "emphasis_scale": 113,
+    "emphasis_lift": 8,
+    "emphasis_ms": 160,
 }
 
 
@@ -770,44 +778,116 @@ def transcribe_video(input_path: str, model_size: str = "auto", language: str = 
         sys.exit(1)
 
 
+PHRASE_STARTERS = set(
+    "di ke dari pada untuk dengan tanpa tentang oleh sampai setelah sebelum karena kalau ketika tapi tetapi lalu "
+    "in on at to from for with without about by after before because if when but then".split()
+)
+KEEP_WITH_NEXT = PHRASE_STARTERS | set(
+    "yang sedang lagi masih akan sudah telah belum baru pernah tidak nggak enggak gak ga tak jangan mau bisa harus "
+    "sangat paling lebih cukup setiap para si sang "
+    "a an the my your his her our their this that these those very more most not will can should could would "
+    "am is are was were have has had".split()
+)
+OBJECT_VERBS = set(
+    "beli jual bawa ambil kasih beri taruh lihat cari baca tulis makan minum pakai buka tutup "
+    "memakai memilih memesan memotong memukul menulis menonton menolak menutup menerima menaruh "
+    "buy bought get got bring brought take took give gave see saw find found read write wrote eat ate drink drank "
+    "want wanted need needed love loved make made tell told play played buying taking giving reading writing "
+    "eating drinking making telling playing".split()
+)
+OBJECT_VERB_PREFIX = re.compile(r"^(?:mem[bpfv]|men[cdjt]|meng[ghkqaeiou]|meny[a-z]|mer[a-z]|mel[a-z]|mew[a-z])[a-z]{2,}$")
+
+
+def estimated_word_width(text: str) -> float:
+    """Estimate width in em so wide glyphs get more room than narrow ones."""
+    return sum(
+        0.30 if char in " ilIjtfr'.,:!|" else
+        0.94 if char in "mwMW@" else
+        0.72 if char.isupper() else 0.58
+        for char in text
+    )
+
+
+def caption_position(word: Dict[str, Any]) -> Optional[float]:
+    value = word.get("caption_y")
+    return value if type(value) in (int, float) and 16 <= value <= 90 else None
+
+
+def caption_word_widths(words: List[Dict[str, Any]], config: Dict[str, Any]) -> List[Tuple[float, float]]:
+    widths = []
+    for word in words:
+        width = estimated_word_width(word["word"])
+        scale = config["emphasis_scale"] if word.get("caption_emphasis") is True else config["pop_scale"]
+        widths.append((width, width * (scale / 100 - 1)))
+    return widths
+
+
 def group_words_into_chunks(words: List[Dict[str, Any]], config: Dict[str, Any]) -> List[List[Dict[str, Any]]]:
-    """
-    Mengelompokkan kata menjadi micro-chunks (2-3 kata per tampilan)
-    berdasarkan jumlah kata, panjang karakter, dan jeda antar-kata.
-    """
-    chunks: List[List[Dict[str, Any]]] = []
-    current_chunk: List[Dict[str, Any]] = []
-
-    max_words = config["max_words_per_chunk"]
-    max_chars = config["max_chars_per_chunk"]
-    pause_thresh = config["pause_threshold_sec"]
-
-    for w in words:
-        if not current_chunk:
-            current_chunk.append(w)
-            continue
-
-        prev_word = current_chunk[-1]
-        pause = w["start"] - prev_word["end"]
-        current_text = " ".join(item["word"] for item in current_chunk)
-        projected_len = len(current_text) + 1 + len(w["word"])
-
-        # Buat baris baru jika sudah mencapai batas kata, batas karakter, jeda napas, atau tanda baca klausa
-        if (
-            len(current_chunk) >= max_words
-            or projected_len > max_chars
-            or pause >= pause_thresh
-            or prev_word.get("ends_clause", False)
-        ):
-            chunks.append(current_chunk)
-            current_chunk = [w]
-        else:
-            current_chunk.append(w)
-
-    if current_chunk:
-        chunks.append(current_chunk)
-
+    """Pilih potongan pendek yang menjaga hubungan kata, dengan batas jeda dan klausa."""
+    size = len(words)
+    costs = [float("inf")] * size + [0]
+    next_cut = [size] * size
+    widths = caption_word_widths(words, config)
+    # First legal cut after each word, including a run of user-requested joins.
+    joined_end = list(range(size))
+    for idx in range(size - 2, -1, -1):
+        if words[idx].get("caption_break") == "join":
+            joined_end[idx] = joined_end[idx + 1]
+    line_width = (config["play_res_x"] - 120) / config["font_size"]
+    for start in range(size - 1, -1, -1):
+        chars = 0
+        em = pop_width = 0.0
+        for end in range(start, min(size, max(joined_end[start] + 1, start + config["max_words_per_chunk"]))):
+            chars += len(words[end]["word"]) + (end > start)
+            width, extra = widths[end]
+            em += width + (0.30 if end > start else 0)
+            pop_width = max(pop_width, extra)
+            if end > joined_end[start] and (chars > config["max_chars_per_chunk"] or em + pop_width > line_width):
+                break
+            if end < joined_end[end]:
+                continue
+            word = words[end]
+            following_word = words[end + 1] if end + 1 < size else None
+            pause = round(following_word["start"] - word["end"], 6) if following_word else 0
+            hard_break = (
+                following_word is None or word.get("caption_break") == "split" or word.get("ends_clause", False)
+                or pause >= config["pause_threshold_sec"] or caption_position(word) != caption_position(following_word)
+            )
+            cost = costs[end + 1] + 6 + (8 if start == end else 0)
+            if not hard_break:
+                prev = words[end]["word"].lower()
+                following = words[end + 1]["word"].lower()
+                if prev in KEEP_WITH_NEXT:
+                    cost += 20
+                elif following not in PHRASE_STARTERS and (
+                    prev in OBJECT_VERBS or OBJECT_VERB_PREFIX.match(prev)
+                ):
+                    cost += 24
+                cost -= 2 * ((following in PHRASE_STARTERS) + (pause >= 0.16))
+            if cost <= costs[start]:
+                costs[start], next_cut[start] = cost, end + 1
+            if hard_break:
+                break
+    chunks = []
+    start = 0
+    while start < size:
+        end = next_cut[start]
+        chunks.append(words[start:end])
+        start = end
     return chunks
+
+
+def caption_motion(duration_ms: int, emphasized: bool, config: Dict[str, Any]) -> Tuple[int, int, int, int]:
+    strength = max(0.35, min(1, duration_ms / config["pop_full_ms"]))
+    scale = config["emphasis_scale"] if emphasized else config["pop_scale"]
+    lift = config["emphasis_lift"] if emphasized else config["pop_lift"]
+    settle_ms = config["emphasis_ms"] if emphasized else config["pop_ms"]
+    return (
+        int(100.5 + (scale - 100) * strength),
+        int(0.5 + lift * strength),
+        config["active_shadow"] + (2 if emphasized else 0),
+        max(1, min(settle_ms, duration_ms)),
+    )
 
 
 def generate_ass_content(chunks: List[List[Dict[str, Any]]], config: Dict[str, Any]) -> str:
@@ -825,16 +905,23 @@ PlayResY: {config['play_res_y']}
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: GoldPulse,{config['font_name']},{config['font_size']},&H00FFFFFF,&H002EB8F5,{config['outline_color']},{config['shadow_color']},-1,0,0,0,100,100,-1,0,1,{config['outline_width']},{config['shadow_depth']},2,60,60,{config['margin_v']},1
+Style: GoldPulse,{config['font_name']},{config['font_size']},{config['inactive_color']},&H00{config['active_color'][2:-1]},{config['outline_color']},{config['shadow_color']},-1,0,0,0,100,100,-1,0,1,{config['outline_width']},{config['shadow_depth']},2,60,60,{config['margin_v']},1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
     dialogue_lines: List[str] = []
     active_c = config["active_color"]
-    inactive_c = config["inactive_color"]
+    shadow_alpha = config["shadow_color"][2:4]
+    x = config["play_res_x"] / 2
 
     for chunk in chunks:
+        position = caption_position(chunk[0])
+        y = (config["play_res_y"] - config["margin_v"] if position is None
+             else int(0.5 + config["play_res_y"] * position / 100))
+        widths = caption_word_widths(chunk, config)
+        em = sum(width for width, _ in widths) + 0.30 * (len(chunk) - 1) + max(extra for _, extra in widths)
+        font_size = max(1, min(config["font_size"], int((config["play_res_x"] - 120) / max(0.01, em))))
         num_words = len(chunk)
         for idx, active_word in enumerate(chunk):
             start_sec = active_word["start"]
@@ -851,28 +938,39 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             start_str = format_ass_time(start_sec)
             end_str = format_ass_time(end_sec)
 
-            # Rakit kalimat dengan highlight kuning pada kata ke-idx
-            formatted_words = []
-            for j, w in enumerate(chunk):
+            # The base layer holds the inactive words still. The centered overlay
+            # keeps the active word centered on its original slot as it scales.
+            duration_ms = int(0.5 + (end_sec - start_sec) * 1000)
+            scale, lift, shadow, pop_ms = caption_motion(duration_ms, active_word.get("caption_emphasis") is True, config)
+            base_words, pop_words = [], []
+            for j, word in enumerate(chunk):
+                token = word["word"].replace("{", "｛").replace("}", "｝").replace("\\", "＼")
                 if j == idx:
-                    formatted_words.append(f"{{\\1c{active_c}}}{w['word']}{{\\1c{inactive_c}}}")
+                    base_words.append(r"{\alpha&HFF&}" + token + rf"{{\alpha&H00&\4a&H{shadow_alpha}&}}")
+                    pop_words.append(
+                        rf"{{\alpha&H00&\4a&H{shadow_alpha}&\1c{active_c}\shad{shadow}"
+                        rf"\fscx{scale}\fscy{scale}\t(0,{pop_ms},\fscx100\fscy100)}}{token}"
+                        r"{\fscx100\fscy100}"
+                    )
                 else:
-                    formatted_words.append(w["word"])
-
-            line_text = " ".join(formatted_words)
+                    base_words.append(token)
+                    pop_words.append(r"{\alpha&HFF&\fscx100\fscy100}" + token)
+            timing = f",{start_str},{end_str},GoldPulse,,0,0,0,,"
+            dialogue_lines.append(f"Dialogue: 0{timing}{{\\pos({x:g},{y})\\fs{font_size}}}" + " ".join(base_words))
             dialogue_lines.append(
-                f"Dialogue: 0,{start_str},{end_str},GoldPulse,,0,0,0,,{line_text}"
+                f"Dialogue: 1{timing}{{\\move({x:g},{y - lift},{x:g},{y},0,{pop_ms})\\fs{font_size}}}"
+                + " ".join(pop_words)
             )
 
     return header + "\n".join(dialogue_lines) + "\n"
 
 
-def update_preview_html(html_path: Path, video_filename: str, ass_content: str,
+def update_preview_html(html_path: Path, video_filename: str, config: Dict[str, Any],
                         words: List[Dict[str, Any]] = None,
                         memory: Dict[str, Any] = None) -> None:
     """
     Otomatis memperbarui preview_player.html dengan video, daftar kata (beserta flag suspect),
-    memori Mini-ML (learned_memory.json), dan isi .ass terbaru langsung dari script.
+    memori Mini-ML dan konfigurasi caption yang dipakai CLI.
     """
     if not html_path.exists():
         return
@@ -899,6 +997,14 @@ def update_preview_html(html_path: Path, video_filename: str, ass_content: str,
             html_text,
             flags=re.DOTALL,
         )
+    preview_config = dict(config, phrase_starters=sorted(PHRASE_STARTERS), keep_with_next=sorted(KEEP_WITH_NEXT),
+                          object_verbs=sorted(OBJECT_VERBS), object_verb_prefix=OBJECT_VERB_PREFIX.pattern)
+    html_text = re.sub(
+        r'(<script id="captionConfig" type="application/json">).*?(</script>)',
+        lambda m: f"{m.group(1)}{json.dumps(preview_config)}{m.group(2)}",
+        html_text,
+        flags=re.DOTALL,
+    )
     html_path.write_text(html_text, encoding="utf-8")
     print(f"[+] Preview HTML & Editor otomatis diperbarui: {html_path}")
 
@@ -943,9 +1049,9 @@ def burn_subtitles_ffmpeg(video_path: str, ass_path: str, output_path: str) -> N
 
 ORIENTATION_PRESETS = {
     # PlayRes mengikuti orientasi video supaya teks tidak gepeng/melar
-    "portrait": {"play_res_x": 1080, "play_res_y": 1920, "font_size": 63, "margin_v": 460, "max_chars_per_chunk": 22},
-    "landscape": {"play_res_x": 1920, "play_res_y": 1080, "font_size": 58, "margin_v": 110, "max_chars_per_chunk": 32},
-    "square": {"play_res_x": 1080, "play_res_y": 1080, "font_size": 56, "margin_v": 150, "max_chars_per_chunk": 24},
+    "portrait": {"play_res_x": 1080, "play_res_y": 1920, "font_size": 72, "margin_v": 460, "max_chars_per_chunk": 26},
+    "landscape": {"play_res_x": 1920, "play_res_y": 1080, "font_size": 67, "margin_v": 110, "max_chars_per_chunk": 32},
+    "square": {"play_res_x": 1080, "play_res_y": 1080, "font_size": 64, "margin_v": 150, "max_chars_per_chunk": 26},
 }
 
 
@@ -1069,12 +1175,12 @@ def main():
     parser.add_argument("--save-words", default=None, help="Simpan daftar kata + timestamp ke JSON ini")
 
     # Style
-    parser.add_argument("--max-words", type=int, default=3, help="Maksimal kata per baris (default: 3)")
+    parser.add_argument("--max-words", type=int, default=4, help="Maksimal kata per baris (default: 4)")
     parser.add_argument("--max-chars", type=int, default=None, help="Maksimal karakter per baris (default: sesuai orientasi)")
-    parser.add_argument("--font", default="Montserrat", help="Nama font (default: Montserrat, file di folder fonts/)")
+    parser.add_argument("--font", default=PRESET_CONFIG["font_name"], help="Nama font (default: Nunito, file di folder fonts/)")
     parser.add_argument("--font-size", type=int, default=None, help="Ukuran font ASS (default: sesuai orientasi)")
     parser.add_argument("--margin-v", type=int, default=None, help="Jarak caption dari bawah (default: sesuai orientasi)")
-    parser.add_argument("--highlight", default="#F5B82E", help="Warna kata aktif #RRGGBB (default: #F5B82E emas)")
+    parser.add_argument("--highlight", help="Warna kata aktif #RRGGBB (default: #F7D26B emas lembut)")
     parser.add_argument("--open-preview", action="store_true", help="Buka preview_player.html di browser setelah selesai")
 
     args = parser.parse_args()
@@ -1099,6 +1205,10 @@ def main():
     size = probe_video_size(str(source_video)) if source_video.exists() else None
     orientation = detect_orientation(size)
     config.update(ORIENTATION_PRESETS[orientation])
+    if args.max_words < 1 or (args.max_chars is not None and args.max_chars < 1):
+        parser.error("--max-words dan --max-chars harus lebih besar dari nol")
+    if args.font_size is not None and args.font_size < 1:
+        parser.error("--font-size harus lebih besar dari nol")
     config["max_words_per_chunk"] = args.max_words
     config["font_name"] = args.font
     if args.max_chars:
@@ -1107,7 +1217,8 @@ def main():
         config["font_size"] = args.font_size
     if args.margin_v is not None:
         config["margin_v"] = args.margin_v
-    config["active_color"] = hex_to_ass_color(args.highlight)
+    if args.highlight is not None:
+        config["active_color"] = hex_to_ass_color(args.highlight)
     print(f"[*] Video: {source_video.name} | {size[0]}x{size[1]} -> {orientation}" if size
           else f"[*] Orientasi default: {orientation}")
 
@@ -1123,6 +1234,9 @@ def main():
                 "start": float(w["start"]),
                 "end": float(w["end"]),
                 "ends_clause": bool(w.get("ends_clause", False)) or has_clause_break(w.get("word", "")),
+                "caption_break": w.get("caption_break") if w.get("caption_break") in ("split", "join") else None,
+                "caption_y": caption_position(w),
+                "caption_emphasis": w.get("caption_emphasis") is True,
             }
             for w in raw_words
             if clean_word(w.get("word", ""))
@@ -1162,8 +1276,6 @@ def main():
         mem_prompt, mem_hotwords = build_whisper_hints_from_memory(memory, lang=target_hint_lang)
         effective_prompt = args.prompt or mem_prompt
         effective_hotwords = args.hotwords or mem_hotwords
-        if effective_hotwords:
-            print(f"[🧠 Mini-ML ({(target_hint_lang or '?').upper()})] Kosakata disuntik ke Whisper: {effective_hotwords}")
 
         words, detected_lang = transcribe_video(
             str(input_path),
@@ -1192,7 +1304,6 @@ def main():
             words = apply_glossary(words, load_glossary(args.glossary))
 
         words = analyze_suspect_words(words, memory=memory, auto_fix_threshold=args.auto_fix_ml, lang=active_lang)
-        save_learned_memory(memory)
 
     if not words:
         print("[!] Tidak ada kata yang terdeteksi.", file=sys.stderr)
@@ -1210,7 +1321,7 @@ def main():
         Path(args.save_words).write_text(json.dumps(words, indent=1, ensure_ascii=False), encoding="utf-8")
         print(f"[+] Daftar kata disimpan: {args.save_words}")
 
-    # 2. Micro-chunk 2-3 kata per baris
+    # 2. Pecah transkrip menjadi frasa pendek
     chunks = group_words_into_chunks(words, config)
 
     # 3. Generate .ass
@@ -1225,7 +1336,7 @@ def main():
         video_ref = source_video.name
     else:
         video_ref = source_video.as_uri() if source_video.exists() else source_video.name
-    update_preview_html(preview_html_path, video_ref, ass_content, words=words, memory=memory)
+    update_preview_html(preview_html_path, video_ref, config, words=words, memory=memory)
 
     # 5. Burn-in
     if args.burn:

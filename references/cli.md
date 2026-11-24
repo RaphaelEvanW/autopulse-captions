@@ -62,11 +62,11 @@ Pascal GPUs (compute capability 6.x) use pure `int8`. If loading or decoding fai
 
 | Flag | Default | Meaning |
 | --- | --- | --- |
-| `--max-words` | `3` | Words per line |
-| `--max-chars` | by orientation (22 / 32 / 24) | Characters per line |
-| `--font` | `Montserrat` | Font family (files in `fonts/`) |
-| `--font-size` | by orientation (63 / 58 / 56) | ASS font size |
+| `--max-words` | `4` | Maximum word entries per line |
+| `--max-chars` | by orientation (26 / 32 / 26) | Maximum characters per line |
+| `--font` | `Nunito` | Font family (files in `fonts/`) |
+| `--font-size` | by orientation (72 / 67 / 64) | ASS font size |
 | `--margin-v` | by orientation (460 / 110 / 150) | Distance from bottom |
-| `--highlight` | `#F5B82E` | Active-word color |
+| `--highlight` | `#F7D26B` | Active-word color |
 
 Orientation presets: portrait 1080×1920, landscape 1920×1080, square 1080×1080.
