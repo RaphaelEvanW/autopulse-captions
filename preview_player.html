@@ -106,7 +106,7 @@
       font-size: 22px;
       letter-spacing: -0.3px;
       line-height: 1.15;
-      color: #FFF9EF;
+      color: #F0ECE5;
       paint-order: stroke fill;
       white-space: nowrap;
     }
@@ -122,8 +122,20 @@
     }
     .caption-overlay .active {
       display: inline-block;
-      color: #F7D26B;
+      position: relative;
+      isolation: isolate;
       transform-origin: center bottom;
+    }
+    .caption-overlay .active::before {
+      content: "";
+      position: absolute;
+      left: var(--hud-left);
+      top: var(--hud-top);
+      width: var(--hud-width);
+      height: var(--hud-height);
+      z-index: -1;
+      background: var(--hud-color);
+      border-radius: var(--hud-radius);
     }
     .shorts-guide {
       position: absolute;
@@ -3601,7 +3613,7 @@
 }
   </script>
 
-  <script id="captionConfig" type="application/json">{"play_res_x": 1080, "play_res_y": 1920, "font_name": "Nunito", "font_size": 72, "active_color": "&H6BD2F7&", "inactive_color": "&H00EFF9FF", "outline_color": "&H0025222A", "shadow_color": "&HB8221B21", "outline_width": 2.645, "shadow_depth": 1.6, "margin_v": 460, "max_words_per_chunk": 4, "max_chars_per_chunk": 26, "pause_threshold_sec": 0.35, "pop_scale": 107, "pop_lift": 5, "pop_ms": 120, "active_shadow": 3, "pop_full_ms": 180, "emphasis_scale": 113, "emphasis_lift": 8, "emphasis_ms": 160, "phrase_starters": ["about", "after", "at", "because", "before", "but", "by", "dari", "dengan", "di", "for", "from", "if", "in", "kalau", "karena", "ke", "ketika", "lalu", "oleh", "on", "pada", "sampai", "sebelum", "setelah", "tanpa", "tapi", "tentang", "tetapi", "then", "to", "untuk", "when", "with", "without"], "keep_with_next": ["a", "about", "after", "akan", "am", "an", "are", "at", "baru", "because", "before", "belum", "bisa", "but", "by", "can", "could", "cukup", "dari", "dengan", "di", "enggak", "for", "from", "ga", "gak", "had", "harus", "has", "have", "her", "his", "if", "in", "is", "jangan", "kalau", "karena", "ke", "ketika", "lagi", "lalu", "lebih", "masih", "mau", "more", "most", "my", "nggak", "not", "oleh", "on", "our", "pada", "paling", "para", "pernah", "sampai", "sang", "sangat", "sebelum", "sedang", "setelah", "setiap", "should", "si", "sudah", "tak", "tanpa", "tapi", "telah", "tentang", "tetapi", "that", "the", "their", "then", "these", "this", "those", "tidak", "to", "untuk", "very", "was", "were", "when", "will", "with", "without", "would", "yang", "your"], "object_verbs": ["ambil", "ate", "baca", "bawa", "beli", "beri", "bought", "bring", "brought", "buka", "buy", "buying", "cari", "drank", "drink", "drinking", "eat", "eating", "find", "found", "gave", "get", "give", "giving", "got", "jual", "kasih", "lihat", "love", "loved", "made", "makan", "make", "making", "memakai", "memesan", "memilih", "memotong", "memukul", "menaruh", "menerima", "menolak", "menonton", "menulis", "menutup", "minum", "need", "needed", "pakai", "play", "played", "playing", "read", "reading", "saw", "see", "take", "taking", "taruh", "tell", "telling", "told", "took", "tulis", "tutup", "want", "wanted", "write", "writing", "wrote"], "object_verb_prefix": "^(?:mem[bpfv]|men[cdjt]|meng[ghkqaeiou]|meny[a-z]|mer[a-z]|mel[a-z]|mew[a-z])[a-z]{2,}$"}</script>
+  <script id="captionConfig" type="application/json">{"play_res_x": 1080, "play_res_y": 1920, "font_name": "Nunito", "font_size": 72, "active_color": "&H4DBBF1&", "mood_colors": {"tense": "&H6250F6&", "fun": "&H4DF6B8&"}, "hud_color": "&H69292320", "hud_padding_x": 16, "hud_padding_y": 10, "hud_radius": 15, "hud_font_layout": {"nunito": [1, 0.202], "montserrat": [0.783, 0.286], "arial": [1, 0.19]}, "inactive_color": "&H00E5ECF0", "outline_color": "&H002B2428", "shadow_color": "&HB8221B21", "outline_width": 2, "shadow_depth": 1.2, "margin_v": 460, "max_words_per_chunk": 4, "max_chars_per_chunk": 26, "pause_threshold_sec": 0.35, "pop_scale": 104, "pop_lift": 3, "pop_ms": 120, "active_shadow": 1, "pop_full_ms": 180, "emphasis_scale": 109, "emphasis_lift": 6, "emphasis_ms": 160, "phrase_starters": ["about", "after", "at", "because", "before", "but", "by", "dari", "dengan", "di", "for", "from", "if", "in", "kalau", "karena", "ke", "ketika", "lalu", "oleh", "on", "pada", "sampai", "sebelum", "setelah", "tanpa", "tapi", "tentang", "tetapi", "then", "to", "untuk", "when", "with", "without"], "keep_with_next": ["a", "about", "after", "akan", "am", "an", "are", "at", "baru", "because", "before", "belum", "bisa", "but", "by", "can", "could", "cukup", "dari", "dengan", "di", "enggak", "for", "from", "ga", "gak", "had", "harus", "has", "have", "her", "his", "if", "in", "is", "jangan", "kalau", "karena", "ke", "ketika", "lagi", "lalu", "lebih", "masih", "mau", "more", "most", "my", "nggak", "not", "oleh", "on", "our", "pada", "paling", "para", "pernah", "sampai", "sang", "sangat", "sebelum", "sedang", "setelah", "setiap", "should", "si", "sudah", "tak", "tanpa", "tapi", "telah", "tentang", "tetapi", "that", "the", "their", "then", "these", "this", "those", "tidak", "to", "untuk", "very", "was", "were", "when", "will", "with", "without", "would", "yang", "your"], "object_verbs": ["ambil", "ate", "baca", "bawa", "beli", "beri", "bought", "bring", "brought", "buka", "buy", "buying", "cari", "drank", "drink", "drinking", "eat", "eating", "find", "found", "gave", "get", "give", "giving", "got", "jual", "kasih", "lihat", "love", "loved", "made", "makan", "make", "making", "memakai", "memesan", "memilih", "memotong", "memukul", "menaruh", "menerima", "menolak", "menonton", "menulis", "menutup", "minum", "need", "needed", "pakai", "play", "played", "playing", "read", "reading", "saw", "see", "take", "taking", "taruh", "tell", "telling", "told", "took", "tulis", "tutup", "want", "wanted", "write", "writing", "wrote"], "object_verb_prefix": "^(?:mem[bpfv]|men[cdjt]|meng[ghkqaeiou]|meny[a-z]|mer[a-z]|mel[a-z]|mew[a-z])[a-z]{2,}$"}</script>
   <script>
     const c = JSON.parse(document.getElementById("captionConfig").textContent);
     function cssAssColor(ass) {
@@ -3611,9 +3623,16 @@
       return "#" + bgr.slice(4) + bgr.slice(2, 4) + bgr.slice(0, 2) + alpha.toString(16).padStart(2, "0");
     }
     const captionInk = cssAssColor(c.inactive_color);
-    const activeInk = cssAssColor(c.active_color);
     const outlineInk = cssAssColor(c.outline_color);
     const shadowInk = cssAssColor(c.shadow_color);
+    const captionCanvas = document.createElement("canvas").getContext("2d");
+    const captionFont = '700 288px "' + c.font_name + '"';
+    captionCanvas.font = captionFont + ", Arial, sans-serif";
+    const captionMetrics = new Map();
+    function measureCaptionText(text) {
+      if (!captionMetrics.has(text)) captionMetrics.set(text, captionCanvas.measureText(text));
+      return captionMetrics.get(text);
+    }
     const phraseStarters = new Set(c.phrase_starters);
     const keepWithNext = new Set(c.keep_with_next);
     const objectVerbs = new Set(c.object_verbs);
@@ -3831,6 +3850,14 @@
       return typeof y === "number" && y >= 16 && y <= 90 ? y : null;
     }
 
+    function captionMood(word) {
+      return ["tense", "fun"].includes(word.caption_mood) ? word.caption_mood : null;
+    }
+
+    function captionEmphasized(word) {
+      return word.caption_emphasis === true || captionMood(word) !== null;
+    }
+
     function captionWordWidths(tokens) {
       return tokens.map(word => {
         const width = Array.from(word.word).reduce((sum, char) => {
@@ -3838,7 +3865,7 @@
           if ("mwMW@".includes(char)) return sum + 0.94;
           return sum + (/\p{Lu}/u.test(char) ? 0.72 : 0.58);
         }, 0);
-        const scale = word.caption_emphasis === true ? c.emphasis_scale : c.pop_scale;
+        const scale = captionEmphasized(word) ? c.emphasis_scale : c.pop_scale;
         return [width, width * (scale / 100 - 1)];
       });
     }
@@ -3934,7 +3961,8 @@
           cues.push({
             start: startSec,
             end: endSec,
-            ...captionMotion(Math.round((endSec - startSec) * 1000), activeWord.caption_emphasis === true),
+            ...captionMotion(Math.round((endSec - startSec) * 1000), captionEmphasized(activeWord)),
+            activeColor: c.mood_colors[captionMood(activeWord)] ?? c.active_color,
             y,
             position,
             fontSize,
@@ -4055,6 +4083,16 @@
           rebuildChunksAndCues();
         });
 
+        const mood = document.createElement("select");
+        mood.className = "mini-btn";
+        mood.setAttribute("aria-label", "Warna kata " + w.word);
+        mood.append(new Option("Default", ""), new Option("Tegang", "tense"), new Option("Fun", "fun"));
+        mood.value = captionMood(w) ?? "";
+        mood.addEventListener("change", () => {
+          w.caption_mood = mood.value || null;
+          rebuildChunksAndCues();
+        });
+
         // Hapus kata
         const delBtn = document.createElement("button");
         delBtn.className = "mini-btn danger";
@@ -4127,7 +4165,7 @@
         mainLine.appendChild(endInput);
         mainLine.appendChild(input);
         if (replaceAllBtn) mainLine.appendChild(replaceAllBtn);
-        mainLine.append(boundary, emphasis);
+        mainLine.append(boundary, emphasis, mood);
         mainLine.appendChild(addBtn);
         mainLine.appendChild(delBtn);
         row.appendChild(mainLine);
@@ -4167,6 +4205,7 @@
       });
     }
 
+    let hudPreviewScale;
     function renderAtTime(t) {
       const maxDur = words.length ? words[words.length - 1].end : 0;
       timeDisplay.textContent = `${formatClock(t)} / ${formatClock(maxDur)}`;
@@ -4175,6 +4214,8 @@
       captionBox.style.fontFamily = c.font_name + ", Arial, sans-serif";
       captionBox.style.fontSize = ((cue?.fontSize ?? c.font_size) * scale) + "px";
       captionBox.style.color = captionInk;
+      captionBox.style.setProperty("--hud-color", cssAssColor(c.hud_color));
+      captionBox.style.setProperty("--hud-radius", (c.hud_radius * scale) + "px");
       captionBox.style.webkitTextStroke = (2 * c.outline_width * scale) + "px " + outlineInk;
       captionBox.style.textShadow = "0 " + (c.shadow_depth * scale) + "px " + (2 * scale) + "px " + shadowInk;
       captionBox.style.bottom = (cue ? 100 - 100 * cue.y / c.play_res_y : 100 * c.margin_v / c.play_res_y) + "%";
@@ -4187,6 +4228,7 @@
       if (cue !== displayedCue) {
         displayedCue = cue;
         activeCaptionWord = null;
+        hudPreviewScale = undefined;
         captionBox.replaceChildren();
         if (cue) {
           cue.chunkWords.forEach((word, index) => {
@@ -4195,7 +4237,7 @@
               activeCaptionWord = document.createElement("span");
               activeCaptionWord.className = "active";
               activeCaptionWord.textContent = word;
-              activeCaptionWord.style.color = activeInk;
+              activeCaptionWord.style.color = cssAssColor(cue.activeColor);
               captionBox.append(activeCaptionWord);
             } else {
               captionBox.append(word);
@@ -4204,6 +4246,20 @@
         }
       }
       if (activeCaptionWord) {
+        if (hudPreviewScale !== scale) {
+          hudPreviewScale = scale;
+          const fontBox = measureCaptionText("Mg");
+          const wordBox = measureCaptionText(cue.chunkWords[cue.activePos]);
+          const factor = cue.fontSize * scale / 288;
+          const baseline = (288 * 1.15 + fontBox.fontBoundingBoxAscent - fontBox.fontBoundingBoxDescent) / 2;
+          const style = activeCaptionWord.style;
+          style.setProperty("--hud-left", (-wordBox.actualBoundingBoxLeft * factor - c.hud_padding_x * scale) + "px");
+          style.setProperty("--hud-top", ((baseline - wordBox.actualBoundingBoxAscent) * factor - c.hud_padding_y * scale) + "px");
+          style.setProperty("--hud-width", ((wordBox.actualBoundingBoxLeft + wordBox.actualBoundingBoxRight) *
+            factor + 2 * c.hud_padding_x * scale) + "px");
+          style.setProperty("--hud-height", ((wordBox.actualBoundingBoxAscent + wordBox.actualBoundingBoxDescent) *
+            factor + 2 * c.hud_padding_y * scale) + "px");
+        }
         const gain = 1 - Math.min(1, (t - cue.start) * 1000 / cue.popMs);
         const pop = 1 + (cue.popScale / 100 - 1) * gain;
         const lift = cue.popLift * scale * gain;
@@ -4222,8 +4278,23 @@
       }
     }
 
+    function roundedHudPath(width, height, radius) {
+      const r = Math.min(radius, Math.floor(width / 2), Math.floor(height / 2));
+      const k = Math.round(r * 0.552285);
+      return "m " + r + " 0 l " + (width - r) + " 0 b " + (width - r + k) + " 0 " + width + " " +
+        (r - k) + " " + width + " " + r + " l " + width + " " + (height - r) + " b " + width + " " +
+        (height - r + k) + " " + (width - r + k) + " " + height + " " + (width - r) + " " + height +
+        " l " + r + " " + height + " b " + (r - k) + " " + height + " 0 " + (height - r + k) +
+        " 0 " + (height - r) + " l 0 " + r + " b 0 " + (r - k) + " " + (r - k) + " 0 " + r + " 0";
+    }
+
     // Export ke format .ass lengkap
     function generateAssString() {
+      const fontBox = measureCaptionText("Mg");
+      const fontHeight = fontBox.fontBoundingBoxAscent + fontBox.fontBoundingBoxDescent;
+      const [stretch, baseline] = c.hud_font_layout[c.font_name.toLowerCase()] ??
+        [1, fontBox.fontBoundingBoxDescent / fontHeight];
+      const layouts = new Map();
       let out = `[Script Info]
 Title: GoldPulse Storytelling Caption Preset
 ScriptType: v4.00+
@@ -4243,27 +4314,60 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
       cues.forEach(cue => {
         const startStr = formatAssTime(cue.start);
         const endStr = formatAssTime(cue.end);
-        const x = c.play_res_x / 2;
         const y = cue.y;
-        const base = [];
-        const overlay = [];
         const shadowAlpha = c.shadow_color.slice(2, 4);
-        cue.chunkWords.forEach((word, index) => {
-          const token = word.replaceAll("{", "｛").replaceAll("}", "｝").replaceAll("\\", "＼");
-          if (index === cue.activePos) {
-            base.push("{\\alpha&HFF&}" + token + "{\\alpha&H00&\\4a&H" + shadowAlpha + "&}");
-            overlay.push("{\\alpha&H00&\\4a&H" + shadowAlpha + "&\\1c" + c.active_color + "\\shad" + cue.shadow +
-              "\\fscx" + cue.popScale + "\\fscy" + cue.popScale +
-              "\\t(0," + cue.popMs + ",\\fscx100\\fscy100)}" + token + "{\\fscx100\\fscy100}");
-          } else {
-            base.push(token);
-            overlay.push("{\\alpha&HFF&\\fscx100\\fscy100}" + token);
+        const hudAlpha = c.hud_color.slice(2, 4);
+        const scaleTags = "\\fscx" + cue.popScale + "\\fscy" + cue.popScale +
+          "\\t(0," + cue.popMs + ",\\fscx100\\fscy100)";
+        if (!layouts.has(cue.chunkIndex)) {
+          const factor = cue.fontSize * stretch / fontHeight;
+          const space = measureCaptionText(" ").width * factor;
+          const entries = cue.chunkWords.map(word => {
+            const token = word.replaceAll("{", "｛").replaceAll("}", "｝").replaceAll("\\", "＼");
+            return { token, box: measureCaptionText(token) };
+          });
+          const lineWidth = entries.reduce((sum, { box }) => sum + box.width * factor, 0) +
+            space * (entries.length - 1);
+          let left = (c.play_res_x - lineWidth) / 2;
+          const layout = entries.map(({ token, box }) => {
+            const width = box.width * factor;
+            const slot = {
+              token,
+              x: left + width / 2,
+              cx: (box.actualBoundingBoxRight - box.actualBoundingBoxLeft - box.width) * factor / 2,
+              cy: (box.actualBoundingBoxDescent - box.actualBoundingBoxAscent) * factor / 2 - cue.fontSize * baseline,
+              inkWidth: (box.actualBoundingBoxLeft + box.actualBoundingBoxRight) * factor,
+              inkHeight: (box.actualBoundingBoxAscent + box.actualBoundingBoxDescent) * factor
+            };
+            left += width + space;
+            return slot;
+          });
+          layouts.set(cue.chunkIndex, layout);
+        }
+        const layout = layouts.get(cue.chunkIndex);
+        const { x, cx, cy, inkWidth, inkHeight, token } = layout[cue.activePos];
+        const timing = "," + startStr + "," + endStr + ",GoldPulse,,0,0,0,,";
+        const pop = cue.popScale / 100;
+        const hx = Math.round(x + cx);
+        const hy = Math.round(y + cy);
+        const startHx = Math.round(x + cx * pop);
+        const startHy = Math.round(y - cue.popLift + cy * pop);
+        const hudWidth = Math.max(1, Math.round(inkWidth * pop)) + 2 * c.hud_padding_x;
+        const hudHeight = Math.max(1, Math.round(inkHeight * pop)) + 2 * c.hud_padding_y;
+        const hudTags = "{\\an5\\move(" + startHx + "," + startHy + "," + hx + "," + hy + ",0," +
+          cue.popMs + ")\\bord0\\shad0\\1c&H" + c.hud_color.slice(4) + "&\\1a&H" + hudAlpha + "&\\p1}";
+        out += "Dialogue: 0" + timing + hudTags + roundedHudPath(hudWidth, hudHeight, c.hud_radius) + "\n";
+        layout.forEach((slot, i) => {
+          if (i !== cue.activePos) {
+            out += "Dialogue: 1" + timing + "{\\pos(" + slot.x.toFixed(2) + "," + y + ")\\fs" +
+              cue.fontSize + "}" + slot.token + "\n";
           }
         });
-        const timing = "," + startStr + "," + endStr + ",GoldPulse,,0,0,0,,";
-        out += "Dialogue: 0" + timing + "{\\pos(" + x + "," + y + ")\\fs" + cue.fontSize + "}" + base.join(" ") + "\n";
-        out += "Dialogue: 1" + timing + "{\\move(" + x + "," + (y - cue.popLift) + "," + x + "," + y +
-          ",0," + cue.popMs + ")\\fs" + cue.fontSize + "}" + overlay.join(" ") + "\n";
+        const wordX = x.toFixed(2);
+        const activeTags = "{\\move(" + wordX + "," + (y - cue.popLift) + "," + wordX + "," + y +
+          ",0," + cue.popMs + ")\\fs" + cue.fontSize + "\\4a&H" + shadowAlpha + "&\\1c" +
+          cue.activeColor + "\\shad" + cue.shadow + scaleTags + "}";
+        out += "Dialogue: 2" + timing + activeTags + token + "\n";
       });
       return out;
     }
@@ -4312,7 +4416,13 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
       renderWordList();
     });
 
-    document.getElementById("downloadAssBtn").addEventListener("click", () => {
+    const captionFontReady = document.fonts.load(captionFont).then(() => {
+      captionMetrics.clear();
+      hudPreviewScale = undefined;
+      renderAtTime(videoPlayer.currentTime || 0);
+    }).catch(() => {});
+    document.getElementById("downloadAssBtn").addEventListener("click", async () => {
+      await captionFontReady;
       downloadFile("goldpulse_revised.ass", generateAssString(), "text/plain;charset=utf-8");
     });
 

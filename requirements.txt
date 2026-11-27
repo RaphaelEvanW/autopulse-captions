@@ -1,3 +1,4 @@
 # Dependency dasar (semua mesin: CPU / GPU)
 faster-whisper>=1.1.0
 numpy
+Pillow>=10

@@ -67,6 +67,6 @@ Pascal GPUs (compute capability 6.x) use pure `int8`. If loading or decoding fai
 | `--font` | `Nunito` | Font family (files in `fonts/`) |
 | `--font-size` | by orientation (72 / 67 / 64) | ASS font size |
 | `--margin-v` | by orientation (460 / 110 / 150) | Distance from bottom |
-| `--highlight` | `#F7D26B` | Active-word color |
+| `--highlight` | `#F1BB4D` | Default active-word color |
 
 Orientation presets: portrait 1080×1920, landscape 1920×1080, square 1080×1080.

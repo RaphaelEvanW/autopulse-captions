@@ -16,6 +16,7 @@ import os
 import re
 import subprocess
 import sys
+from functools import lru_cache
 from pathlib import Path
 from typing import List, Dict, Any, Tuple, Optional
 
@@ -61,23 +62,30 @@ PRESET_CONFIG = {
     "play_res_y": 1920,
     "font_name": "Nunito",
     "font_size": 72,
-    "active_color": "&H6BD2F7&",     # #F7D26B
-    "inactive_color": "&H00EFF9FF",  # #FFF9EF
-    "outline_color": "&H0025222A",   # #2A2225
+    "active_color": "&H4DBBF1&",     # #F1BB4D
+    "mood_colors": {"tense": "&H6250F6&", "fun": "&H4DF6B8&"},
+    "hud_color": "&H69292320",      # #202329, 59% opacity
+    "hud_padding_x": 16,
+    "hud_padding_y": 10,
+    "hud_radius": 15,
+    # Font metric scale and baseline offset measured against libass at PlayRes size.
+    "hud_font_layout": {"nunito": [1, 0.202], "montserrat": [0.783, 0.286], "arial": [1, 0.19]},
+    "inactive_color": "&H00E5ECF0",  # #F0ECE5
+    "outline_color": "&H002B2428",   # #28242B
     "shadow_color": "&HB8221B21",    # #211B22, 28% opacity
-    "outline_width": 2.645,
-    "shadow_depth": 1.6,
+    "outline_width": 2,
+    "shadow_depth": 1.2,
     "margin_v": 460,                 # Dikebawahkan (~24% dari bawah layar)
     "max_words_per_chunk": 4,
     "max_chars_per_chunk": 26,
     "pause_threshold_sec": 0.35,     # Pisah baris baru jika ada jeda bicara > 0.35 detik
-    "pop_scale": 107,
-    "pop_lift": 5,
+    "pop_scale": 104,
+    "pop_lift": 3,
     "pop_ms": 120,
-    "active_shadow": 3,
+    "active_shadow": 1,
     "pop_full_ms": 180,
-    "emphasis_scale": 113,
-    "emphasis_lift": 8,
+    "emphasis_scale": 109,
+    "emphasis_lift": 6,
     "emphasis_ms": 160,
 }
 
@@ -813,11 +821,20 @@ def caption_position(word: Dict[str, Any]) -> Optional[float]:
     return value if type(value) in (int, float) and 16 <= value <= 90 else None
 
 
+def caption_mood(word: Dict[str, Any]) -> Optional[str]:
+    mood = word.get("caption_mood")
+    return mood if mood in ("tense", "fun") else None
+
+
+def caption_emphasized(word: Dict[str, Any]) -> bool:
+    return word.get("caption_emphasis") is True or caption_mood(word) is not None
+
+
 def caption_word_widths(words: List[Dict[str, Any]], config: Dict[str, Any]) -> List[Tuple[float, float]]:
     widths = []
     for word in words:
         width = estimated_word_width(word["word"])
-        scale = config["emphasis_scale"] if word.get("caption_emphasis") is True else config["pop_scale"]
+        scale = config["emphasis_scale"] if caption_emphasized(word) else config["pop_scale"]
         widths.append((width, width * (scale / 100 - 1)))
     return widths
 
@@ -890,9 +907,75 @@ def caption_motion(duration_ms: int, emphasized: bool, config: Dict[str, Any]) -
     )
 
 
+@lru_cache(maxsize=8)
+def hud_font(font_name: str):
+    from PIL import ImageFont
+
+    fonts = SCRIPT_DIR / "fonts"
+    bundled = {"nunito": "Nunito-Bold.ttf", "montserrat": "Montserrat-Bold.ttf"}
+    if font_name.casefold() in bundled:
+        return ImageFont.truetype(str(fonts / bundled[font_name.casefold()]), 288)
+    bold_filename = {"arial": "arialbd.ttf"}.get(font_name.casefold(), f"{font_name}-Bold.ttf")
+    for filename in (bold_filename, f"{font_name}.ttf", f"{font_name.replace(' ', '')}.ttf"):
+        try:
+            return ImageFont.truetype(filename, 288)
+        except OSError:
+            continue
+    return ImageFont.truetype(str(fonts / "Nunito-Bold.ttf"), 288)
+
+
+@lru_cache(maxsize=4096)
+def glyph_metrics(font, token: str):
+    mask, (ox, oy) = font.getmask2(token, anchor="ls")
+    left, top, right, bottom = mask.getbbox() or (0, 0, 0, 0)
+    return font.getlength(token), (left + ox, top + oy, right + ox, bottom + oy)
+
+
+def caption_word_layout(tokens: List[str], font_size: int, config: Dict[str, Any]):
+    try:
+        font = hud_font(config["font_name"])
+    except ImportError:
+        # Existing environments can still export after updating the script.
+        space_width = 0.20 * font_size
+        descent = 0.20 * font_size
+        boxes = []
+        for token in tokens:
+            width = estimated_word_width(token) * font_size * 0.84
+            boxes.append((width, (0, -0.55 * font_size, width, 0.15 * font_size)))
+    else:
+        ascent, font_descent = font.getmetrics()
+        stretch, baseline = config["hud_font_layout"].get(
+            font.getname()[0].casefold(), (1, font_descent / (ascent + font_descent))
+        )
+        factor = font_size * stretch / (ascent + font_descent)
+        descent = font_size * baseline
+        space_width = font.getlength(" ") * factor
+        boxes = []
+        for token in tokens:
+            advance, bounds = glyph_metrics(font, token)
+            boxes.append((advance * factor, tuple(value * factor for value in bounds)))
+
+    line_width = sum(width for width, _ in boxes) + (len(boxes) - 1) * space_width
+    left = (config["play_res_x"] - line_width) / 2
+    for width, (l, t, r, b) in boxes:
+        yield left + width / 2, (l + r - width) / 2, (t + b) / 2 - descent, r - l, b - t
+        left += width + space_width
+
+
+def rounded_hud_path(width: int, height: int, radius: int) -> str:
+    r = min(radius, width // 2, height // 2)
+    k = round(r * 0.552285)
+    return (
+        f"m {r} 0 l {width-r} 0 b {width-r+k} 0 {width} {r-k} {width} {r} "
+        f"l {width} {height-r} b {width} {height-r+k} {width-r+k} {height} {width-r} {height} "
+        f"l {r} {height} b {r-k} {height} 0 {height-r+k} 0 {height-r} "
+        f"l 0 {r} b 0 {r-k} {r-k} 0 {r} 0"
+    )
+
+
 def generate_ass_content(chunks: List[List[Dict[str, Any]]], config: Dict[str, Any]) -> str:
     """
-    Membuat isi file .ass lengkap dengan highlight warna kuning per kata aktif.
+    Membuat isi file .ass dengan HUD dan highlight per kata aktif.
     """
     header = f"""[Script Info]
 Title: GoldPulse Storytelling Caption Preset
@@ -911,9 +994,9 @@ Style: GoldPulse,{config['font_name']},{config['font_size']},{config['inactive_c
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
     dialogue_lines: List[str] = []
-    active_c = config["active_color"]
     shadow_alpha = config["shadow_color"][2:4]
-    x = config["play_res_x"] / 2
+    hud_alpha = config["hud_color"][2:4]
+    hud_color = config["hud_color"][4:]
 
     for chunk in chunks:
         position = caption_position(chunk[0])
@@ -922,6 +1005,8 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         widths = caption_word_widths(chunk, config)
         em = sum(width for width, _ in widths) + 0.30 * (len(chunk) - 1) + max(extra for _, extra in widths)
         font_size = max(1, min(config["font_size"], int((config["play_res_x"] - 120) / max(0.01, em))))
+        tokens = [word["word"].replace("{", "｛").replace("}", "｝").replace("\\", "＼") for word in chunk]
+        layout = list(caption_word_layout(tokens, font_size, config))
         num_words = len(chunk)
         for idx, active_word in enumerate(chunk):
             start_sec = active_word["start"]
@@ -938,29 +1023,34 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             start_str = format_ass_time(start_sec)
             end_str = format_ass_time(end_sec)
 
-            # The base layer holds the inactive words still. The centered overlay
-            # keeps the active word centered on its original slot as it scales.
+            # The text and HUD share an anchor. The inactive words keep their
+            # positions while the active word scales around its own slot.
             duration_ms = int(0.5 + (end_sec - start_sec) * 1000)
-            scale, lift, shadow, pop_ms = caption_motion(duration_ms, active_word.get("caption_emphasis") is True, config)
-            base_words, pop_words = [], []
-            for j, word in enumerate(chunk):
-                token = word["word"].replace("{", "｛").replace("}", "｝").replace("\\", "＼")
-                if j == idx:
-                    base_words.append(r"{\alpha&HFF&}" + token + rf"{{\alpha&H00&\4a&H{shadow_alpha}&}}")
-                    pop_words.append(
-                        rf"{{\alpha&H00&\4a&H{shadow_alpha}&\1c{active_c}\shad{shadow}"
-                        rf"\fscx{scale}\fscy{scale}\t(0,{pop_ms},\fscx100\fscy100)}}{token}"
-                        r"{\fscx100\fscy100}"
-                    )
-                else:
-                    base_words.append(token)
-                    pop_words.append(r"{\alpha&HFF&\fscx100\fscy100}" + token)
+            active_c = config["mood_colors"].get(caption_mood(active_word), config["active_color"])
+            scale, lift, shadow, pop_ms = caption_motion(duration_ms, caption_emphasized(active_word), config)
+            scale_tags = rf"\fscx{scale}\fscy{scale}\t(0,{pop_ms},\fscx100\fscy100)"
             timing = f",{start_str},{end_str},GoldPulse,,0,0,0,,"
-            dialogue_lines.append(f"Dialogue: 0{timing}{{\\pos({x:g},{y})\\fs{font_size}}}" + " ".join(base_words))
-            dialogue_lines.append(
-                f"Dialogue: 1{timing}{{\\move({x:g},{y - lift},{x:g},{y},0,{pop_ms})\\fs{font_size}}}"
-                + " ".join(pop_words)
+            x, cx, cy, ink_width, ink_height = layout[idx]
+            pop = scale / 100
+            hx, hy = round(x + cx), round(y + cy)
+            start_hx, start_hy = round(x + cx * pop), round(y - lift + cy * pop)
+            hud_width = max(1, int(ink_width * pop + 0.5)) + 2 * config["hud_padding_x"]
+            hud_height = max(1, int(ink_height * scale / 100 + 0.5)) + 2 * config["hud_padding_y"]
+            hud_path = rounded_hud_path(hud_width, hud_height, config["hud_radius"])
+            hud_tags = (
+                rf"\an5\move({start_hx},{start_hy},{hx},{hy},0,{pop_ms})\bord0\shad0"
+                rf"\1c&H{hud_color}&\1a&H{hud_alpha}&\p1"
             )
+            dialogue_lines.append(f"Dialogue: 0{timing}{{{hud_tags}}}{hud_path}")
+            for j, token in enumerate(tokens):
+                word_x = layout[j][0]
+                if j != idx:
+                    dialogue_lines.append(f"Dialogue: 1{timing}{{\\pos({word_x:.2f},{y})\\fs{font_size}}}{token}")
+            active_tags = (
+                rf"\move({x:.2f},{y - lift},{x:.2f},{y},0,{pop_ms})\fs{font_size}"
+                rf"\4a&H{shadow_alpha}&\1c{active_c}\shad{shadow}{scale_tags}"
+            )
+            dialogue_lines.append(f"Dialogue: 2{timing}{{{active_tags}}}{tokens[idx]}")
 
     return header + "\n".join(dialogue_lines) + "\n"
 
@@ -1180,7 +1270,7 @@ def main():
     parser.add_argument("--font", default=PRESET_CONFIG["font_name"], help="Nama font (default: Nunito, file di folder fonts/)")
     parser.add_argument("--font-size", type=int, default=None, help="Ukuran font ASS (default: sesuai orientasi)")
     parser.add_argument("--margin-v", type=int, default=None, help="Jarak caption dari bawah (default: sesuai orientasi)")
-    parser.add_argument("--highlight", help="Warna kata aktif #RRGGBB (default: #F7D26B emas lembut)")
+    parser.add_argument("--highlight", help="Warna kata aktif standar #RRGGBB (default: #F1BB4D emas hangat)")
     parser.add_argument("--open-preview", action="store_true", help="Buka preview_player.html di browser setelah selesai")
 
     args = parser.parse_args()
@@ -1237,6 +1327,7 @@ def main():
                 "caption_break": w.get("caption_break") if w.get("caption_break") in ("split", "join") else None,
                 "caption_y": caption_position(w),
                 "caption_emphasis": w.get("caption_emphasis") is True,
+                "caption_mood": caption_mood(w),
             }
             for w in raw_words
             if clean_word(w.get("word", ""))

@@ -9,13 +9,19 @@ PlayResY: 1920
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: GoldPulse,Nunito,72,&H00EFF9FF,&H006BD2F7,&H0025222A,&HB8221B21,-1,0,0,0,100,100,-1,0,1,2.645,1.6,2,60,60,460,1
+Style: GoldPulse,Nunito,72,&H00E5ECF0,&H004DBBF1,&H002B2428,&HB8221B21,-1,0,0,0,100,100,-1,0,1,2,1.2,2,60,60,460,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-Dialogue: 0,0:00:00.00,0:00:00.30,GoldPulse,,0,0,0,,{\pos(540,1460)\fs72}{\alpha&HFF&}I've{\alpha&H00&\4a&HB8&} never been
-Dialogue: 1,0:00:00.00,0:00:00.30,GoldPulse,,0,0,0,,{\move(540,1455,540,1460,0,120)\fs72}{\alpha&H00&\4a&HB8&\1c&H6BD2F7&\shad3\fscx107\fscy107\t(0,120,\fscx100\fscy100)}I've{\fscx100\fscy100} {\alpha&HFF&\fscx100\fscy100}never {\alpha&HFF&\fscx100\fscy100}been
-Dialogue: 0,0:00:00.30,0:00:00.60,GoldPulse,,0,0,0,,{\pos(540,1460)\fs72}I've {\alpha&HFF&}never{\alpha&H00&\4a&HB8&} been
-Dialogue: 1,0:00:00.30,0:00:00.60,GoldPulse,,0,0,0,,{\move(540,1455,540,1460,0,120)\fs72}{\alpha&HFF&\fscx100\fscy100}I've {\alpha&H00&\4a&HB8&\1c&H6BD2F7&\shad3\fscx107\fscy107\t(0,120,\fscx100\fscy100)}never{\fscx100\fscy100} {\alpha&HFF&\fscx100\fscy100}been
-Dialogue: 0,0:00:00.60,0:00:00.95,GoldPulse,,0,0,0,,{\pos(540,1460)\fs72}I've never {\alpha&HFF&}been{\alpha&H00&\4a&HB8&}
-Dialogue: 1,0:00:00.60,0:00:00.95,GoldPulse,,0,0,0,,{\move(540,1455,540,1460,0,120)\fs72}{\alpha&HFF&\fscx100\fscy100}I've {\alpha&HFF&\fscx100\fscy100}never {\alpha&H00&\4a&HB8&\1c&H6BD2F7&\shad3\fscx107\fscy107\t(0,120,\fscx100\fscy100)}been{\fscx100\fscy100}
+Dialogue: 0,0:00:00.00,0:00:00.30,GoldPulse,,0,0,0,,{\an5\move(401,1423,400,1427,0,120)\bord0\shad0\1c&H292320&\1a&H69&\p1}m 15 0 l 98 0 b 106 0 113 7 113 15 l 113 45 b 113 53 106 60 98 60 l 15 60 b 7 60 0 53 0 45 l 0 15 b 0 7 7 0 15 0
+Dialogue: 1,0:00:00.00,0:00:00.30,GoldPulse,,0,0,0,,{\pos(522.46,1460)\fs72}never
+Dialogue: 1,0:00:00.00,0:00:00.30,GoldPulse,,0,0,0,,{\pos(662.98,1460)\fs72}been
+Dialogue: 2,0:00:00.00,0:00:00.30,GoldPulse,,0,0,0,,{\move(399.47,1457,399.47,1460,0,120)\fs72\4a&HB8&\1c&H4DBBF1&\shad1\fscx104\fscy104\t(0,120,\fscx100\fscy100)}I've
+Dialogue: 0,0:00:00.30,0:00:00.60,GoldPulse,,0,0,0,,{\an5\move(525,1428,524,1432,0,120)\bord0\shad0\1c&H292320&\1a&H69&\p1}m 15 0 l 154 0 b 162 0 169 7 169 15 l 169 33 b 169 41 162 48 154 48 l 15 48 b 7 48 0 41 0 33 l 0 15 b 0 7 7 0 15 0
+Dialogue: 1,0:00:00.30,0:00:00.60,GoldPulse,,0,0,0,,{\pos(399.47,1460)\fs72}I've
+Dialogue: 1,0:00:00.30,0:00:00.60,GoldPulse,,0,0,0,,{\pos(662.98,1460)\fs72}been
+Dialogue: 2,0:00:00.30,0:00:00.60,GoldPulse,,0,0,0,,{\move(522.46,1457,522.46,1460,0,120)\fs72\4a&HB8&\1c&H4DBBF1&\shad1\fscx104\fscy104\t(0,120,\fscx100\fscy100)}never
+Dialogue: 0,0:00:00.60,0:00:00.95,GoldPulse,,0,0,0,,{\an5\move(663,1423,663,1427,0,120)\bord0\shad0\1c&H292320&\1a&H69&\p1}m 15 0 l 133 0 b 141 0 148 7 148 15 l 148 45 b 148 53 141 60 133 60 l 15 60 b 7 60 0 53 0 45 l 0 15 b 0 7 7 0 15 0
+Dialogue: 1,0:00:00.60,0:00:00.95,GoldPulse,,0,0,0,,{\pos(399.47,1460)\fs72}I've
+Dialogue: 1,0:00:00.60,0:00:00.95,GoldPulse,,0,0,0,,{\pos(522.46,1460)\fs72}never
+Dialogue: 2,0:00:00.60,0:00:00.95,GoldPulse,,0,0,0,,{\move(662.98,1457,662.98,1460,0,120)\fs72\4a&HB8&\1c&H4DBBF1&\shad1\fscx104\fscy104\t(0,120,\fscx100\fscy100)}been
